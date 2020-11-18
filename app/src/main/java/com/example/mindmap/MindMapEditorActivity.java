@@ -64,24 +64,27 @@ public class MindMapEditorActivity extends AppCompatActivity {
         return statusBarHeight + titleBarHeight;
     }
 
-    public static void move(Fragment fragment, int deltaX, int deltaY)
+    public static void move(NodeFragment fragment, int deltaX, int deltaY)
     {
-        move(fragment.getView(), deltaX, deltaY);
+        move(fragment.node, fragment.getView(), deltaX, deltaY);
     }
 
-    public static void move(View view, int deltaX, int deltaY)
+    public static void move(Node node, View view, int deltaX, int deltaY)
     {
         ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams)view.getLayoutParams();
-        moveTo(view, params.leftMargin + deltaX, params.topMargin + deltaY);
+        moveTo(node, view, params.leftMargin + deltaX, params.topMargin + deltaY);
     }
 
-    public static void moveTo(Fragment fragment, int x, int y)
+    public static void moveTo(NodeFragment fragment, int x, int y)
     {
-        moveTo(fragment.getView(), x, y);
+        moveTo(fragment.node, fragment.getView(), x, y);
     }
 
-    public static void moveTo(View view, int x, int y)
+    public static void moveTo(Node node, View view, int x, int y)
     {
+        node.leftMargin = x;
+        node.topMargin = y;
+
         ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams)view.getLayoutParams();
         params.setMargins(x, y, 0, 0);
         view.requestLayout();

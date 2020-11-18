@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public class Node
 {
     public String text;
+    public int leftMargin, topMargin;
 
     public Node parent;
     public ArrayList<Node> children;
