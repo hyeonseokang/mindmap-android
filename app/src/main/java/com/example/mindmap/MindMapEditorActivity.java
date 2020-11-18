@@ -11,6 +11,7 @@ import android.content.DialogInterface;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -35,7 +36,6 @@ public class MindMapEditorActivity extends AppCompatActivity {
     private DrawView drawView;
 
     private CrawlingThread crawling;
-    TestCrawling test;
 
     public static void moveRecursively(NodeFragment fragment, int deltaX, int deltaY)
     {
@@ -159,17 +159,11 @@ public class MindMapEditorActivity extends AppCompatActivity {
                 crawling = new CrawlingThread() {
                     @Override
                     public void CompleteCrawling() {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+                        /*AlertDialog.Builder builder = new AlertDialog.Builder(activity);
 
                         builder.setTitle("추천단어");
 
-                        ArrayList<String> allWords = new ArrayList<>();
-                        for (ArrayList<String> words : crawling.getSimilarWords().values())
-                        {
-                            allWords.addAll(words);
-                        }
-
-                        final String[] items = (String[])allWords.toArray();
+                        final String[] items = (String[])crawling.getSimilarWords().get("비슷한말").toArray();
 
                         builder.setItems(items, new DialogInterface.OnClickListener(){
                             @Override
@@ -183,18 +177,15 @@ public class MindMapEditorActivity extends AppCompatActivity {
                         alertDialog.show();
 
                         dialog.dismiss();
+                        crawling = null;*/
+
+                        Log.d("asdf", crawling.getSimilarWords().get("비슷한말").toString());
+                        dialog.dismiss();
                         crawling = null;
                     }
                 };
 
-                //crawling.start(fragment.node.text);
-                
-                test = new TestCrawling(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(getApplicationContext(), test.testWord, Toast.LENGTH_SHORT).show();
-                    }
-                });
+                crawling.start(fragment.node.text);
             }
         });
 
