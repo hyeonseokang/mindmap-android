@@ -395,7 +395,7 @@ public class MindMapEditorActivity extends AppCompatActivity {
 
         prevX = prevY = -1;
 
-        addNode(null, "감자");
+        addNode(null, "감자").makeRoot();
     }
 
     @Override

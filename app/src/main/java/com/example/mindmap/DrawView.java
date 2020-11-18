@@ -18,7 +18,7 @@ public class DrawView extends View {
     public DrawView(MindMapEditorActivity context) {
         super(context);
 
-        paint.setColor(Color.BLACK);
+        paint.setColor(Color.GRAY);
         paint.setStrokeWidth(10);
 
         activity = context;

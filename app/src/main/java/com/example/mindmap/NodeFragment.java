@@ -25,10 +25,15 @@ public class NodeFragment extends Fragment {
 
     public Node node;
 
+    private ImageButton button;
+    private TextView topText;
+
     private TextView text;
     private View view;
 
     private MindMapEditorActivity activity;
+
+    private boolean root = false;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -75,6 +80,11 @@ public class NodeFragment extends Fragment {
         this.text.setText(text);
     }
 
+    public void makeRoot()
+    {
+        root = true;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,7 +104,9 @@ public class NodeFragment extends Fragment {
 
         final NodeFragment fragment = this;
 
-        ImageButton button = view.findViewById(R.id.node_img);
+        button = view.findViewById(R.id.node_img);
+        topText = view.findViewById(R.id.node_text_top);
+
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -102,6 +114,13 @@ public class NodeFragment extends Fragment {
                 activity.openNodeMenu(fragment);
             }
         });
+
+        if (root)
+        {
+            button.setImageDrawable(getResources().getDrawable(R.drawable.node_big));
+            topText.setVisibility(View.VISIBLE);
+            text.setVisibility(View.GONE);
+        }
 
         return view;
     }
