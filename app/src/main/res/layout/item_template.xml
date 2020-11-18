@@ -1,14 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <ImageView
+        android:id="@+id/templateImage"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+    </ImageView>
+
     <TextView
-        android:id="@+id/templateName"
+        android:id="@+id/templateNameText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="템플릿"
-        android:textSize="64dp">
+        android:textSize="16sp"
+        android:textColor="#000000"
+        android:textStyle="bold"
+        android:layout_marginLeft="17dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/templateImage">
     </TextView>
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/templateDescriptionText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="템플릿 설명"
+        android:layout_marginTop="15dp"
+        android:textSize="16sp"
+        android:textColor="#000000"
+        android:layout_marginLeft="17dp"
+        app:layout_constraintTop_toBottomOf="@id/templateNameText"
+        app:layout_constraintStart_toEndOf="@+id/templateImage">
+    </TextView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,17 +1,21 @@
 package com.example.mindmap;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Rect;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -25,9 +29,13 @@ import java.util.Locale;
 
 public class ListActivity extends AppCompatActivity {
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().hide();
+        Window window = getWindow();
+        window.setStatusBarColor(Color.BLACK);
         setContentView(R.layout.activity_list);
 
         final ArrayList<String> data = new ArrayList<>();
@@ -101,6 +109,7 @@ public class ListActivity extends AppCompatActivity {
                 focusView.clearFocus();
             }
         }
+
         return super.dispatchTouchEvent(ev);
     }
 }
