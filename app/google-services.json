@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "86553429747",
+    "firebase_url": "https://mindmap-2cbf4.firebaseio.com",
+    "project_id": "mindmap-2cbf4",
+    "storage_bucket": "mindmap-2cbf4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:86553429747:android:ed5a15d7de451807221986",
+        "android_client_info": {
+          "package_name": "com.example.mindmap"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "86553429747-52kt3h4ogbtuuodmg4gfissn69ffl36t.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.mindmap",
+            "certificate_hash": "6d5d65de157af02c4b963a69d4a6c04097a70d89"
+          }
+        },
+        {
+          "client_id": "86553429747-3af3cmijl0halbp6lf6b0qgrvup5k4c3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCvbYmnxwjVo6qRc0_v74QHZyzbTvXcMLY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "86553429747-3af3cmijl0halbp6lf6b0qgrvup5k4c3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
