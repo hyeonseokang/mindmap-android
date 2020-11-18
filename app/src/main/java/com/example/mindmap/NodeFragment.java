@@ -6,9 +6,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.w3c.dom.Text;
+
+import java.util.Random;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -17,6 +22,18 @@ import org.w3c.dom.Text;
  *
  */
 public class NodeFragment extends Fragment {
+
+    public Node node;
+
+    private ImageButton button;
+    private TextView topText;
+
+    private TextView text;
+    private View view;
+
+    private MindMapEditorActivity activity;
+
+    private boolean root = false;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -47,6 +64,25 @@ public class NodeFragment extends Fragment {
 
     public NodeFragment() {
         // Required empty public constructor
+
+    }
+
+    public NodeFragment(MindMapEditorActivity activity, String text)
+    {
+        node = new Node(this, text);
+
+        this.activity = activity;
+    }
+
+    public void rename(String text)
+    {
+        node.text = text;
+        this.text.setText(text);
+    }
+
+    public void makeRoot()
+    {
+        root = true;
     }
 
     @Override
@@ -61,15 +97,30 @@ public class NodeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_node, container, false);
+        view = inflater.inflate(R.layout.fragment_node, container, false);
 
-        Button button = view.findViewById(R.id.node_img);
+        text = view.findViewById(R.id.node_text);
+        text.setText(node.text);
+
+        final NodeFragment fragment = this;
+
+        button = view.findViewById(R.id.node_img);
+        topText = view.findViewById(R.id.node_text_top);
+
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                //node.addChild(activity.addNode(node.text + "_node", node).node);
+                activity.openNodeMenu(fragment);
             }
         });
+
+        if (root)
+        {
+            button.setImageDrawable(getResources().getDrawable(R.drawable.node_big));
+            topText.setVisibility(View.VISIBLE);
+            text.setVisibility(View.GONE);
+        }
 
         return view;
     }
