@@ -159,33 +159,40 @@ public class MindMapEditorActivity extends AppCompatActivity {
                 crawling = new CrawlingThread() {
                     @Override
                     public void CompleteCrawling() {
-                        /*AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-
-                        builder.setTitle("추천단어");
-
-                        final String[] items = (String[])crawling.getSimilarWords().get("비슷한말").toArray();
-
-                        builder.setItems(items, new DialogInterface.OnClickListener(){
-                            @Override
-                            public void onClick(DialogInterface dialog, int pos)
-                            {
-                                addNode(fragment, items[pos]);
-                            }
-                        });
-
-                        AlertDialog alertDialog = builder.create();
-                        alertDialog.show();
-
-                        dialog.dismiss();
-                        crawling = null;*/
-
-                        Log.d("asdf", crawling.getSimilarWords().get("비슷한말").toString());
-                        dialog.dismiss();
-                        crawling = null;
                     }
                 };
 
                 crawling.start(fragment.node.text);
+
+                try {
+                    crawling.join();
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+
+                    builder.setTitle("추천단어");
+
+                    ArrayList<String> words = crawling.getSimilarWords().get("비슷한말");
+                    final String[] items = new String[words.size()];
+                    words.toArray(items);
+
+                    builder.setItems(items, new DialogInterface.OnClickListener(){
+                        @Override
+                        public void onClick(DialogInterface dialog, int pos)
+                        {
+                            addNode(fragment, items[pos]);
+                        }
+                    });
+
+                    AlertDialog alertDialog = builder.create();
+                    alertDialog.show();
+
+                    dialog.dismiss();
+                    crawling = null;
+                }
+                catch(Exception e)
+                {
+
+                }
             }
         });
 
