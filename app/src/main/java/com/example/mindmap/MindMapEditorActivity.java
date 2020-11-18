@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -32,6 +33,9 @@ public class MindMapEditorActivity extends AppCompatActivity {
     private int prevX, prevY;
 
     private DrawView drawView;
+
+    private CrawlingThread crawling;
+    TestCrawling test;
 
     public static void moveRecursively(NodeFragment fragment, int deltaX, int deltaY)
     {
@@ -152,24 +156,45 @@ public class MindMapEditorActivity extends AppCompatActivity {
         btnRecommand.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-
-                builder.setTitle("추천단어");
-
-                final String[] items = new String[] {"a", "b", "c"};
-
-                builder.setItems(items, new DialogInterface.OnClickListener(){
+                crawling = new CrawlingThread() {
                     @Override
-                    public void onClick(DialogInterface dialog, int pos)
-                    {
-                        addNode(fragment, items[pos]);
+                    public void CompleteCrawling() {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+
+                        builder.setTitle("추천단어");
+
+                        ArrayList<String> allWords = new ArrayList<>();
+                        for (ArrayList<String> words : crawling.getSimilarWords().values())
+                        {
+                            allWords.addAll(words);
+                        }
+
+                        final String[] items = (String[])allWords.toArray();
+
+                        builder.setItems(items, new DialogInterface.OnClickListener(){
+                            @Override
+                            public void onClick(DialogInterface dialog, int pos)
+                            {
+                                addNode(fragment, items[pos]);
+                            }
+                        });
+
+                        AlertDialog alertDialog = builder.create();
+                        alertDialog.show();
+
+                        dialog.dismiss();
+                        crawling = null;
+                    }
+                };
+
+                //crawling.start(fragment.node.text);
+                
+                test = new TestCrawling(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getApplicationContext(), test.testWord, Toast.LENGTH_SHORT).show();
                     }
                 });
-
-                AlertDialog alertDialog = builder.create();
-                alertDialog.show();
-
-                dialog.dismiss();
             }
         });
 
@@ -379,7 +404,7 @@ public class MindMapEditorActivity extends AppCompatActivity {
 
         prevX = prevY = -1;
 
-        addNode(null, "Root");
+        addNode(null, "감자");
     }
 
     @Override
