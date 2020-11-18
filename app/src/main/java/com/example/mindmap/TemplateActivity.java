@@ -1,11 +1,15 @@
 package com.example.mindmap;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,9 +19,13 @@ import java.util.ArrayList;
 
 public class TemplateActivity extends AppCompatActivity {
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().hide();
+        Window window = getWindow();
+        window.setStatusBarColor(Color.BLACK);
         setContentView(R.layout.activity_template);
 
         Button backButton;

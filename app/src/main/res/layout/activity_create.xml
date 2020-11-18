@@ -1,45 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/backToTemplateButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="뒤로">
-        </Button>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="템플릿">
-        </TextView>
-
-    </LinearLayout>
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="시작 단어">
-    </EditText>
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="설명">
-    </EditText>
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:orientation="vertical">
 
     <Button
-        android:layout_width="wrap_content"
+        android:id="@+id/backToTemplateButton"
+        android:layout_width="40dp"
         android:layout_height="wrap_content"
-        android:text="마인드맵 생성">
+        android:layout_marginLeft="10dp"
+        android:background="@null"
+        android:text="뒤로"
+        android:textColor="#000000"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/createTemplateImage"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
     </Button>
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/createMindMapText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="아이디어 만들기"
+        android:textColor="#000000"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/createTemplateImage"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+    </TextView>
+
+    <Button
+        android:id="@+id/createButton"
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="10dp"
+        android:background="@null"
+        android:text="다음"
+        android:textColor="#929DFF"
+        app:layout_constraintBottom_toTopOf="@+id/createTemplateImage"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+    </Button>
+
+    <ImageView
+        android:id="@+id/createTemplateImage"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_marginTop="64dp"
+        app:layout_constraintTop_toTopOf="parent">
+    </ImageView>
+
+    <EditText
+        android:id="@+id/startingWordEdit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="주제"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        app:layout_constraintTop_toBottomOf="@+id/createTemplateImage"
+        tools:layout_editor_absoluteX="16dp">
+    </EditText>
+
+    <EditText
+        android:id="@+id/descriptionEdit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:hint="설명"
+        app:layout_constraintTop_toBottomOf="@+id/startingWordEdit"
+        tools:layout_editor_absoluteX="16dp">
+    </EditText>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
