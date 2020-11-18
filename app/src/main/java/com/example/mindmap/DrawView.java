@@ -24,17 +24,31 @@ public class DrawView extends View {
         activity = context;
     }
 
+    private static int getRelativeLeft(View myView) {
+        if (myView.getParent() == myView.getRootView())
+            return myView.getLeft();
+        else
+            return myView.getLeft() + getRelativeLeft((View) myView.getParent());
+    }
+
+    private static int getRelativeTop(View myView) {
+        if (myView.getParent() == myView.getRootView())
+            return myView.getTop();
+        else
+            return myView.getTop() + getRelativeTop((View) myView.getParent());
+    }
+
     private void drawConnections(Canvas canvas, NodeFragment fragment)
     {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+        /*if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
             return;
-        }
+        }*/
 
         int barsHeight = activity.getBarHseight();
 
-        int[] parentLocation = new int[2];
         View parentView = fragment.getView().findViewById(R.id.node_img);
-        parentView.getLocationInSurface(parentLocation);
+        int[] parentLocation = new int[] {getRelativeLeft(parentView), getRelativeTop(parentView)};
+        //parentView.getLocationInSurface(parentLocation);
         parentLocation[0] += parentView.getWidth() / 2;
         parentLocation[1] += parentView.getHeight() / 2;
 
@@ -52,8 +66,8 @@ public class DrawView extends View {
                 continue;
             }
 
-            int[] childLocation = new int[2];
-            childView.getLocationInSurface(childLocation);
+            int[] childLocation = new int[] {getRelativeLeft(childView), getRelativeTop(childView)};
+            //childView.getLocationInSurface(childLocation);
             childLocation[0] += childView.getWidth() / 2;
             childLocation[1] += childView.getHeight() / 2;
 
