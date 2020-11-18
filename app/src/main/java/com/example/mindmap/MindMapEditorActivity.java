@@ -8,11 +8,9 @@ import androidx.fragment.app.FragmentTransaction;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.text.InputType;
-import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -20,9 +18,9 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
@@ -87,6 +85,11 @@ public class MindMapEditorActivity extends AppCompatActivity {
         ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams)view.getLayoutParams();
         params.setMargins(x, y, 0, 0);
         view.requestLayout();
+    }
+
+    public Node getRootNode()
+    {
+        return nodeFragments.get(0).node;
     }
 
     public ArrayList<NodeFragment> getNodeFragments()
@@ -317,9 +320,57 @@ public class MindMapEditorActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_mind_map_editor);
 
+        ViewGroup drawViewContainer = (ViewGroup)findViewById(R.id.draw_view_container);
+
         drawView = new DrawView(this);
-        drawView.setBackgroundColor(Color.TRANSPARENT);
-        addContentView(drawView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        drawViewContainer.addView(drawView);
+
+        final MindMapEditorActivity activity = this;
+
+        FloatingActionButton floatingButton = findViewById(R.id.floating_button);
+        floatingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LayoutInflater layoutInflater = (LayoutInflater)activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                View menu = layoutInflater.inflate(R.layout.fragment_editor_floating_button_menu, null);
+
+                final BottomSheetDialog dialog = new BottomSheetDialog(activity);
+                dialog.setContentView(menu);
+
+                menu.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+
+                Button btnSave = menu.findViewById(R.id.btn_save);
+                btnSave.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+
+                Button btnShare = menu.findViewById(R.id.btn_share);
+                btnShare.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+
+                Button btnDelete = menu.findViewById(R.id.btn_delete);
+                btnDelete.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+
+                dialog.show();
+            }
+        });
 
         nodeFragments = new ArrayList<>();
 

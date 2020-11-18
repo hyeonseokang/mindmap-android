@@ -19,6 +19,7 @@ public class DrawView extends View {
         super(context);
 
         paint.setColor(Color.BLACK);
+        paint.setStrokeWidth(10);
 
         activity = context;
     }
@@ -32,18 +33,30 @@ public class DrawView extends View {
         int barsHeight = activity.getBarHseight();
 
         int[] parentLocation = new int[2];
-        fragment.getView().getLocationInSurface(parentLocation);
+        View parentView = fragment.getView().findViewById(R.id.node_img);
+        parentView.getLocationInSurface(parentLocation);
+        parentLocation[0] += parentView.getWidth() / 2;
+        parentLocation[1] += parentView.getHeight() / 2;
 
         for (Node child : fragment.node.children)
         {
-            int[] childLocation = new int[2];
             View childView = child.fragment.getView();
             if (childView == null)
             {
                 continue;
             }
 
+            childView = childView.findViewById(R.id.node_img);
+            if (childView == null)
+            {
+                continue;
+            }
+
+            int[] childLocation = new int[2];
             childView.getLocationInSurface(childLocation);
+            childLocation[0] += childView.getWidth() / 2;
+            childLocation[1] += childView.getHeight() / 2;
+
             canvas.drawLine(parentLocation[0], parentLocation[1] - barsHeight, childLocation[0], childLocation[1] - barsHeight, paint);
 
             drawConnections(canvas, child.fragment);
