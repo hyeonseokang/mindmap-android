@@ -47,6 +47,7 @@ public abstract class CrawlingThread extends Thread{
         String url = "https://opendict.korean.go.kr/api/search?key=219E631E1D3E9931D7027B6B6777498D&advanced=y&q=";
         SimilarWordCrawler crawler = new SimilarWordCrawler(url);
         similarWords = crawler.crawling(searchWord);
+        similarWords.put("meaning", crawler.getWordMeaning(searchWord));
     }
 
     public HashMap<String, ArrayList<String>> getSimilarWords(){
