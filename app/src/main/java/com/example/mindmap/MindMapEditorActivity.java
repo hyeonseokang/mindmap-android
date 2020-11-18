@@ -208,7 +208,6 @@ public class MindMapEditorActivity extends AppCompatActivity {
                         alertDialog.show();
 
                         dialog.dismiss();
-                        crawling = null;
 
                         return;
                     }
@@ -245,9 +244,25 @@ public class MindMapEditorActivity extends AppCompatActivity {
         btnDefinition.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                crawling = new CrawlingThread() {
+                    @Override
+                    public void CompleteCrawling() {
+                    }
+                };
+                crawling.start(fragment.node.text);
+                try {
+                    crawling.join();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-
-                builder.setTitle("뜻").setMessage("뜻이다.");
+                ArrayList<String> words = crawling.getSimilarWords().get("meaning");
+                
+                String wordMean = "";
+                for (int i=0;i<words.size();i++){
+                    wordMean = wordMean + (i+1) + ". " + words.get(i) + "\n";
+                }
+                builder.setTitle("뜻").setMessage(wordMean);
 
                 builder.setPositiveButton("확인", new DialogInterface.OnClickListener(){
                     @Override
