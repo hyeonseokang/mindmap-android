@@ -159,17 +159,48 @@ public class MindMapEditorActivity extends AppCompatActivity {
                 crawling = new CrawlingThread() {
                     @Override
                     public void CompleteCrawling() {
-                        /*AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+                    }
+                };
 
-                        builder.setTitle("추천단어");
+                try {
+                    crawling.start(fragment.node.text);
+                }
+                catch(Exception e)
+                {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(activity);
 
-                        final String[] items = (String[])crawling.getSimilarWords().get("비슷한말").toArray();
+                    builder.setTitle("알림").setMessage("단어를 찾을 수 없습니다.");
 
-                        builder.setItems(items, new DialogInterface.OnClickListener(){
+                    builder.setPositiveButton("확인", new DialogInterface.OnClickListener(){
+                        @Override
+                        public void onClick(DialogInterface dialog, int id)
+                        {
+
+                        }
+                    });
+
+                    AlertDialog alertDialog = builder.create();
+                    alertDialog.show();
+
+                    dialog.dismiss();
+                    crawling = null;
+                }
+
+                try {
+                    crawling.join();
+
+                    ArrayList<String> words = crawling.getSimilarWords().get("비슷한말");
+                    if (words.size() == 0)
+                    {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+
+                        builder.setTitle("알림").setMessage("추천할 단어가 없습니다.");
+
+                        builder.setPositiveButton("확인", new DialogInterface.OnClickListener(){
                             @Override
-                            public void onClick(DialogInterface dialog, int pos)
+                            public void onClick(DialogInterface dialog, int id)
                             {
-                                addNode(fragment, items[pos]);
+
                             }
                         });
 
@@ -177,15 +208,36 @@ public class MindMapEditorActivity extends AppCompatActivity {
                         alertDialog.show();
 
                         dialog.dismiss();
-                        crawling = null;*/
-
-                        Log.d("asdf", crawling.getSimilarWords().get("비슷한말").toString());
-                        dialog.dismiss();
                         crawling = null;
-                    }
-                };
 
-                crawling.start(fragment.node.text);
+                        return;
+                    }
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+
+                    builder.setTitle("추천단어");
+
+                    final String[] items = new String[words.size()];
+                    words.toArray(items);
+
+                    builder.setItems(items, new DialogInterface.OnClickListener(){
+                        @Override
+                        public void onClick(DialogInterface dialog, int pos)
+                        {
+                            addNode(fragment, items[pos]);
+                        }
+                    });
+
+                    AlertDialog alertDialog = builder.create();
+                    alertDialog.show();
+
+                    dialog.dismiss();
+                    crawling = null;
+                }
+                catch(Exception e)
+                {
+
+                }
             }
         });
 

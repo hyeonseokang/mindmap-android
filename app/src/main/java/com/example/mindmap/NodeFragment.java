@@ -78,6 +78,7 @@ public class NodeFragment extends Fragment {
     {
         node.text = text;
         this.text.setText(text);
+        this.topText.setText(text);
     }
 
     public void makeRoot()
@@ -100,12 +101,14 @@ public class NodeFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_node, container, false);
 
         text = view.findViewById(R.id.node_text);
-        text.setText(node.text);
 
         final NodeFragment fragment = this;
 
         button = view.findViewById(R.id.node_img);
         topText = view.findViewById(R.id.node_text_top);
+
+        text.setText(node.text);
+        topText.setText(node.text);
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
