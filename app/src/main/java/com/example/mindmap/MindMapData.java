@@ -14,4 +14,13 @@ public class MindMapData {
     public String getId(){return id;}
     public String getImage(){return image;}
     public String getExplain(){return explain;}
+
+    @Override
+    public String toString() {
+        return "MindMapData{" +
+                "id='" + id + '\'' +
+                ", image='" + image + '\'' +
+                ", explain='" + explain + '\'' +
+                '}';
+    }
 }
