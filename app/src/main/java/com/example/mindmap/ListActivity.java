@@ -1,12 +1,22 @@
 package com.example.mindmap;
 
+import android.app.AlarmManager;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
@@ -18,15 +28,34 @@ import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Array;
+import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.Random;
 
 public class ListActivity extends AppCompatActivity {
 
@@ -39,11 +68,10 @@ public class ListActivity extends AppCompatActivity {
         window.setStatusBarColor(Color.BLACK);
         setContentView(R.layout.activity_list);
 
+        registerAlarm();
+
         final ArrayList<String> data = new ArrayList<>();
         final ArrayList<String> items = null;
-        for (int i = 0; i < 3; i++) {
-            data.add(String.format("TEXT %d", i));
-        }
 
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -117,5 +145,15 @@ public class ListActivity extends AppCompatActivity {
         }
 
         return super.dispatchTouchEvent(ev);
+    }
+
+    public void registerAlarm()
+    {
+//        ComponentName receiver = new ComponentName(getApplicationContext(), BootReceiver.class);
+//        PackageManager pm = getPackageManager();
+//
+//        pm.setComponentEnabledSetting(receiver,
+//                PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+//                PackageManager.DONT_KILL_APP);
     }
 }
