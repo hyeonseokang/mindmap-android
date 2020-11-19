@@ -1,5 +1,7 @@
 package com.example.mindmap;
 
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
@@ -65,6 +67,7 @@ public class NodeFragment extends Fragment {
     public NodeFragment() {
         // Required empty public constructor
 
+        node = new Node(this, "unknown");
     }
 
     public NodeFragment(MindMapEditorActivity activity, String text)
@@ -79,6 +82,11 @@ public class NodeFragment extends Fragment {
         node.text = text;
         this.text.setText(text);
         this.topText.setText(text);
+    }
+
+    public void setImage(Bitmap bitmap)
+    {
+        button.setImageBitmap(bitmap);
     }
 
     public void makeRoot()

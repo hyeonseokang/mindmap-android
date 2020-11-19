@@ -8,17 +8,25 @@
     tools:context=".MindMapEditorActivity">
 
     <FrameLayout
-        android:id="@+id/draw_view_container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-    </FrameLayout>
-
-    <RelativeLayout
-        android:id="@+id/node_container"
+        android:id="@+id/mind_map_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center" />
+        android:background="#FFFFFF">
+
+        <FrameLayout
+            android:id="@+id/draw_view_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </FrameLayout>
+
+        <RelativeLayout
+            android:id="@+id/node_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center" />
+
+    </FrameLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floating_button"

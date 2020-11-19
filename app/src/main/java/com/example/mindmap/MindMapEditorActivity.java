@@ -1,17 +1,22 @@
 package com.example.mindmap;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.app.AlertDialog;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Rect;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.InputType;
-import android.util.Log;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -19,11 +24,12 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 
 public class MindMapEditorActivity extends AppCompatActivity {
@@ -34,6 +40,8 @@ public class MindMapEditorActivity extends AppCompatActivity {
     private int prevX, prevY;
 
     private DrawView drawView;
+
+    private View mindMapLayout;
 
     private CrawlingThread crawling;
 
@@ -400,11 +408,68 @@ public class MindMapEditorActivity extends AppCompatActivity {
         nodeFragments.remove(fragment);
     }
 
+    public Bitmap captureMindMap()
+    {
+        mindMapLayout.setDrawingCacheEnabled(true);
+        Bitmap bitmap = Bitmap.createBitmap(mindMapLayout.getDrawingCache());
+        mindMapLayout.setDrawingCacheEnabled(false);
+
+        return bitmap;
+    }
+
+    public static String convertBitmapToBase64(Bitmap bitmap)
+    {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        byte[] byteArray = stream.toByteArray();
+        bitmap.recycle();
+
+        return Base64.encodeToString(byteArray, Base64.DEFAULT);
+    }
+
+    public static Bitmap convertBase64ToBitmap(String base64)
+    {
+        byte[] byteArray = Base64.decode(base64, Base64.DEFAULT);
+        return BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+    }
+
+    public String captureMipMapAsBase64()
+    {
+        return convertBitmapToBase64(captureMindMap());
+    }
+
+    public void shareMipmap()
+    {
+        Bitmap icon = captureMindMap();
+        Intent share = new Intent(Intent.ACTION_SEND);
+        share.setType("image/jpeg");
+
+        ContentValues values = new ContentValues();
+        values.put(MediaStore.Images.Media.TITLE, "title");
+        values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
+        Uri uri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                values);
+
+        OutputStream outstream;
+        try {
+            outstream = getContentResolver().openOutputStream(uri);
+            icon.compress(Bitmap.CompressFormat.JPEG, 100, outstream);
+            outstream.close();
+        } catch (Exception e) {
+            System.err.println(e.toString());
+        }
+
+        share.putExtra(Intent.EXTRA_STREAM, uri);
+        startActivity(Intent.createChooser(share, "Share Image"));
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_mind_map_editor);
+
+        mindMapLayout = findViewById(R.id.mind_map_layout);
 
         ViewGroup drawViewContainer = (ViewGroup)findViewById(R.id.draw_view_container);
 
@@ -442,6 +507,7 @@ public class MindMapEditorActivity extends AppCompatActivity {
                 btnShare.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        shareMipmap();
                         dialog.dismiss();
                     }
                 });
