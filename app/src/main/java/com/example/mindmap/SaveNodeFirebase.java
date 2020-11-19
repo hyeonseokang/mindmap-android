@@ -41,6 +41,11 @@ public class SaveNodeFirebase {
         return 22;
     }
 
+    public String getPost()
+    {
+        return post;
+    }
+
     public void setCurrentId(int id){
         currentId = id;
     }
@@ -50,8 +55,8 @@ public class SaveNodeFirebase {
     }
 
     // 실제 사용하는 메소드
-    public String loadNodes(){
-        readNodes();
+    public String loadNodes(Runnable callback){
+        readNodes(callback);
         return post;
     }
 
@@ -115,13 +120,15 @@ public class SaveNodeFirebase {
         return jsonObject;
     }
 
-    private void readNodes(){
+    private void readNodes(final Runnable callback){
         mDatabase.child("users").child("1").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.getValue(String.class) != null){
                     post = dataSnapshot.getValue(String.class);
                     Log.w("FireBaseData", "getData" + post);
+
+                    callback.run();
                 } else {
                     Log.d("실패", "실패");
                 }

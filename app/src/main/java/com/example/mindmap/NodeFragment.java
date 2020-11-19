@@ -37,6 +37,8 @@ public class NodeFragment extends Fragment {
 
     private boolean root = false;
 
+    public Runnable onAddToLayout;
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -72,11 +74,19 @@ public class NodeFragment extends Fragment {
 
     public NodeFragment(MindMapEditorActivity activity, String text)
     {
-        node = new Node(this, text);
+        this.node = new Node(this, text);
+        this.activity = activity;
+    }
+
+    public NodeFragment(MindMapEditorActivity activity, Node node)
+    {
+        this.node = node;
+        this.node.fragment = this;
 
         this.activity = activity;
     }
 
+    // 텍스트 수정
     public void rename(String text)
     {
         node.text = text;
@@ -84,11 +94,13 @@ public class NodeFragment extends Fragment {
         this.topText.setText(text);
     }
 
+    // 버튼 이미지 수정
     public void setImage(Bitmap bitmap)
     {
         button.setImageBitmap(bitmap);
     }
 
+    // 루트 노드로 만듬
     public void makeRoot()
     {
         root = true;

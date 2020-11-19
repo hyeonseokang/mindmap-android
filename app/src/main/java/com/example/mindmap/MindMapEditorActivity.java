@@ -17,6 +17,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.InputType;
 import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -31,6 +32,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class MindMapEditorActivity extends AppCompatActivity {
 
@@ -45,6 +47,11 @@ public class MindMapEditorActivity extends AppCompatActivity {
 
     private CrawlingThread crawling;
 
+    private Random randomFragmentMargins;
+
+    private SaveNodeFirebase db;
+
+    // 현재 노드와 자식 노드까지 한번에 움직임
     public static void moveRecursively(NodeFragment fragment, int deltaX, int deltaY)
     {
         try
@@ -62,6 +69,7 @@ public class MindMapEditorActivity extends AppCompatActivity {
         }
     }
 
+    // 상단바와 타이틀바의 길이를 합한 값을 반환
     public int getBarHseight() {
         View decorView = getWindow().getDecorView();
         Rect rect = new Rect();
@@ -75,6 +83,8 @@ public class MindMapEditorActivity extends AppCompatActivity {
 
         return statusBarHeight + titleBarHeight;
     }
+
+    // move, moveTo 함수들: 지정한 노드를 움직임
 
     public static void move(NodeFragment fragment, int deltaX, int deltaY)
     {
@@ -102,16 +112,19 @@ public class MindMapEditorActivity extends AppCompatActivity {
         view.requestLayout();
     }
 
+    // 루트 노드를 얻음
     public Node getRootNode()
     {
         return nodeFragments.get(0).node;
     }
 
+    // 노트 리스트를 얻음
     public ArrayList<NodeFragment> getNodeFragments()
     {
         return nodeFragments;
     }
 
+    // 노드 단위의 메뉴를 염
     public void openNodeMenu(final NodeFragment fragment)
     {
         final MindMapEditorActivity activity = this;
@@ -347,14 +360,35 @@ public class MindMapEditorActivity extends AppCompatActivity {
         }
     }
 
-    public NodeFragment addNode(NodeFragment parent, String text)
+    private NodeFragment createNodeFragment(NodeFragment nodeFragment)
     {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-        NodeFragment fragment = new NodeFragment(this, text);
+        NodeFragment fragment = nodeFragment;
         fragmentTransaction.add(R.id.node_container, fragment);
         fragmentTransaction.commit();
+
+        return fragment;
+    }
+
+    public void clearNodes()
+    {
+        for (NodeFragment fragment : nodeFragments)
+        {
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.remove(fragment);
+            fragmentTransaction.commit();
+        }
+
+        nodeFragments.clear();
+    }
+
+    // 노드를 추가함
+    public NodeFragment addNode(final NodeFragment parent, String text)
+    {
+        final NodeFragment fragment = createNodeFragment(new NodeFragment(this, text));
 
         nodeFragments.add(fragment);
 
@@ -363,14 +397,61 @@ public class MindMapEditorActivity extends AppCompatActivity {
             parent.node.addChild(fragment.node);
         }
 
+        fragment.onAddToLayout = new Runnable() {
+            @Override
+            public void run() {
+                int leftMargin = randomFragmentMargins.nextInt(200) - 99;
+                int topMargin = randomFragmentMargins.nextInt(200) - 99;
+
+                if (parent != null)
+                {
+                    leftMargin += parent.node.leftMargin;
+                    topMargin += parent.node.topMargin;
+                }
+
+                moveTo(fragment, leftMargin, topMargin);
+            }
+        };
+
         return fragment;
     }
 
+    private NodeFragment _createNodeFragmentHierarchy(final Node node)
+    {
+        final NodeFragment fragment = createNodeFragment(new NodeFragment(this, node));
+
+        fragment.onAddToLayout = new Runnable() {
+            @Override
+            public void run() {
+                moveTo(fragment, node.leftMargin, node.topMargin);
+            }
+        };
+
+        nodeFragments.add(fragment);
+
+        for (Node child : node.children)
+        {
+            _createNodeFragmentHierarchy(child);
+        }
+
+        return fragment;
+    }
+
+    public NodeFragment createNodeFragmentHierarchy(Node root)
+    {
+        NodeFragment rootFragment = _createNodeFragmentHierarchy(root);
+        rootFragment.makeRoot();
+
+        return rootFragment;
+    }
+
+    // 노드에서 표시되는 텍스트를 수정함
     public void renameNode(NodeFragment fragment, String text)
     {
         fragment.rename(text);
     }
 
+    // 노드를 제거함
     public boolean removeNode(Node node)
     {
         NodeFragment nodeFragment = null;
@@ -393,6 +474,7 @@ public class MindMapEditorActivity extends AppCompatActivity {
         return true;
     }
 
+    // 노드를 제거함
     public void removeNode(NodeFragment fragment)
     {
         for (Node child : fragment.node.children)
@@ -408,6 +490,7 @@ public class MindMapEditorActivity extends AppCompatActivity {
         nodeFragments.remove(fragment);
     }
 
+    // 마인드맵을 비트맵으로 캡쳐
     public Bitmap captureMindMap()
     {
         mindMapLayout.setDrawingCacheEnabled(true);
@@ -417,6 +500,7 @@ public class MindMapEditorActivity extends AppCompatActivity {
         return bitmap;
     }
 
+    // 비트맵을 Base64로 인코딩
     public static String convertBitmapToBase64(Bitmap bitmap)
     {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -427,17 +511,20 @@ public class MindMapEditorActivity extends AppCompatActivity {
         return Base64.encodeToString(byteArray, Base64.DEFAULT);
     }
 
+    // Base64로부터 비트맵을 디코딩
     public static Bitmap convertBase64ToBitmap(String base64)
     {
         byte[] byteArray = Base64.decode(base64, Base64.DEFAULT);
         return BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
     }
 
+    // 마인드맵을 캡쳐하여 Base64로 인코딩하여 반환
     public String captureMipMapAsBase64()
     {
         return convertBitmapToBase64(captureMindMap());
     }
 
+    // 마인드맵 공유
     public void shareMipmap()
     {
         Bitmap icon = captureMindMap();
@@ -469,6 +556,8 @@ public class MindMapEditorActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_mind_map_editor);
 
+        randomFragmentMargins = new Random();
+
         mindMapLayout = findViewById(R.id.mind_map_layout);
 
         ViewGroup drawViewContainer = (ViewGroup)findViewById(R.id.draw_view_container);
@@ -499,6 +588,7 @@ public class MindMapEditorActivity extends AppCompatActivity {
                 btnSave.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        db.writeNodes(getRootNode());
                         dialog.dismiss();
                     }
                 });
@@ -528,12 +618,24 @@ public class MindMapEditorActivity extends AppCompatActivity {
 
         prevX = prevY = -1;
 
-        addNode(null, "감자").makeRoot();
+        db = new SaveNodeFirebase();
+
+        db.loadNodes(new Runnable() {
+            @Override
+            public void run() {
+                clearNodes();
+                createNodeFragmentHierarchy(db.CreateNode(db.getPost(), null));
+            }
+        });
+
+        //addNode(null, "감자").makeRoot();
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event)
     {
+        // 선택된 노드를 이동
+
         int x = (int)event.getX();
         int y = (int)event.getY();
 

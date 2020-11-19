@@ -24,6 +24,7 @@ public class DrawView extends View {
         activity = context;
     }
 
+    // 뷰의 x 위치를 구함
     private static int getRelativeLeft(View myView) {
         if (myView.getParent() == myView.getRootView())
             return myView.getLeft();
@@ -31,6 +32,7 @@ public class DrawView extends View {
             return myView.getLeft() + getRelativeLeft((View) myView.getParent());
     }
 
+    // 뷰의 y 위치를 구함
     private static int getRelativeTop(View myView) {
         if (myView.getParent() == myView.getRootView())
             return myView.getTop();
@@ -38,15 +40,29 @@ public class DrawView extends View {
             return myView.getTop() + getRelativeTop((View) myView.getParent());
     }
 
+    // 연결선을 그림
     private void drawConnections(Canvas canvas, NodeFragment fragment)
     {
-        /*if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
-            return;
-        }*/
-
         int barsHeight = activity.getBarHseight();
 
-        View parentView = fragment.getView().findViewById(R.id.node_img);
+        View parentView = fragment.getView();
+        if (parentView == null)
+        {
+            return;
+        }
+
+        parentView = parentView.findViewById(R.id.node_img);
+        if (parentView == null)
+        {
+            return;
+        }
+
+        if (fragment.onAddToLayout != null)
+        {
+            fragment.onAddToLayout.run();
+            fragment.onAddToLayout = null;
+        }
+
         int[] parentLocation = new int[] {getRelativeLeft(parentView), getRelativeTop(parentView)};
         //parentView.getLocationInSurface(parentLocation);
         parentLocation[0] += parentView.getWidth() / 2;
@@ -79,7 +95,11 @@ public class DrawView extends View {
 
     @Override
     public void onDraw(Canvas canvas) {
-        drawConnections(canvas, activity.getNodeFragments().get(0));
+        if (activity.getNodeFragments().size() > 0)
+        {
+            drawConnections(canvas, activity.getNodeFragments().get(0));
+        }
+
         invalidate();
     }
 
