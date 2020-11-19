@@ -61,10 +61,10 @@
             android:id="@+id/createTemplateImage"
             android:layout_width="120dp"
             android:layout_height="120dp"
-            android:paddingTop=""
             android:src="@drawable/mindmap_example"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"></ImageView>
+            app:layout_constraintTop_toTopOf="parent">
+        </ImageView>
 
         <TextView
             android:id="@+id/createTemplateNameText"
