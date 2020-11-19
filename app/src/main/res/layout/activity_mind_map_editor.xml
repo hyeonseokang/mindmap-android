@@ -37,7 +37,8 @@
         android:layout_marginStart="10dp"
         android:clickable="true"
         android:focusable="true"
-        android:src="@android:drawable/ic_menu_add"
+        android:src="@drawable/ic_add"
+        app:backgroundTint="#929DFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
