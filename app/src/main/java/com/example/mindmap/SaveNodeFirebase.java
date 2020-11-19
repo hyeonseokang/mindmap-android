@@ -31,6 +31,7 @@ public class SaveNodeFirebase {
     private DatabaseReference mDatabase;
     private String post;
     private String currentId = "hello";
+    public ArrayList<MindMapData> mindMapdataList = new ArrayList<>();
 
     public SaveNodeFirebase(){
         mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -39,6 +40,31 @@ public class SaveNodeFirebase {
     public String createNewMindMapId(){
         // 랜덤 id값 만든후 검사 무한반복
         return "hello";
+    }
+
+    public void readAllMindMapInfo(final Runnable callback){
+        mDatabase.child("users").child("1").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Log.d("test mindmap", dataSnapshot.getValue().toString());
+                mindMapdataList.clear();
+                for (DataSnapshot postSnapshot: dataSnapshot.getChildren()){
+                    Log.d("test22", postSnapshot.getKey());
+                    String id = postSnapshot.getKey();
+                    String explain = postSnapshot.child("explain").getValue(String.class);
+                    String image = postSnapshot.child("image").getValue(String.class);
+
+                    MindMapData mindMapData = new MindMapData(id, image, explain);
+                    mindMapdataList.add(mindMapData);
+                }
+                callback.run();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.d("실패", "실패");
+            }
+        });
     }
 
     // 처음 마인드맵 새로 만들때 쓰는 거
