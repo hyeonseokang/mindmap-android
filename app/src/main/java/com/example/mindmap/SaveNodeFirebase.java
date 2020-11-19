@@ -79,15 +79,6 @@ public class SaveNodeFirebase {
         });
     }
 
-    // 처음 마인드맵 새로 만들때 쓰는 거
-    public void createNewMindMap(String startWord, String explain){
-        String id = this.createNewMindMapId(); // 새롭게 id 만들고
-        this.setCurrentId(id);
-        this.writeNodes(new Node(null, startWord)); // 노드 생성하고 데이터베이스 보내고
-        this.writeMindMapExplain(explain); // 설명 데이터베이스에 보내고
-        // id 는 createNewMindMapId() 넣으면 자동 동기화
-    }
-
     public void writeMindMapExplain(String explain){
         mDatabase.child("users").child(getUserId()).child(currentId).child("explain").setValue(explain);
     }

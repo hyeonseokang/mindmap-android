@@ -34,6 +34,18 @@ public class MainActivity extends AppCompatActivity {
     private static final int RC_SIGN_IN = 9001;
     private SignInButton signInButton;
 
+
+    // 요 부분에서 로그인후 넘어갈 Activity 지정하면 됨
+    private void updateUI(FirebaseUser user) {
+        if (user != null) {
+            UserInfo.getInstance().setUserId(user);
+            Intent intent = new Intent(this, MindMapEditorActivity.class);
+            startActivity(intent);
+            finish();
+        }
+    }
+
+
     public void googleLogin(){
         signInButton = findViewById(R.id.signInButton);
 
@@ -104,15 +116,6 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
-    private void updateUI(FirebaseUser user) { //update ui code here
-        if (user != null) {
-            UserInfo.getInstance().setUserId(user);
-            Intent intent = new Intent(this, MindMapEditorActivity.class);
-            startActivity(intent);
-            finish();
-        }
-    }
-
     private void signIn() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
@@ -124,15 +127,44 @@ class TestGetMindMap{
     SaveNodeFirebase db;
     TestGetMindMap(){
         db = new SaveNodeFirebase();
+    }
+
+    // 처음 마인드맵 새로 만들때 쓰는 거
+    public void createNewMindMap(String startWord, String explain){
+        String id = db.createNewMindMapId(); // 새롭게 id 만들고
+        db.setCurrentId(id);
+        db.writeNodes(new Node(null, startWord)); // 노드 생성하고 데이터베이스 보내고
+        db.writeMindMapExplain(explain); // 설명 데이터베이스에 보내고
+        db.writeMindMapExplain(null); // 이미지 임시로 null 값 보내고
+        // id 는 createNewMindMapId() 넣으면 자동 동기화
+    }
+
+    // 처음 메인메뉴 진입할때 firebase에 저장된 자기꺼  MindMap 모두 불러오는거
+    public void loadAllMindMap(){
         db.readAllMindMapInfo(new Runnable() {
             @Override
             public void run() {
                 for(int i=0;i<db.mindMapdataList.size();i++){
                     MindMapData mindMapData = db.mindMapdataList.get(i);
+
+                    // 이거 3개값 알아서 따로 저장하면됨
                     Log.d("id 값", mindMapData.getId());
                     Log.d("image string 값",mindMapData.getId());
                     Log.d("설명", mindMapData.getExplain());
                 }
+            }
+        });
+    }
+
+    // 메인메뉴에서 MindMap 리스트 보여준후 거기서 선택해서 그 선택한 값 id값을 인자로 넘기면됨
+    public void selectMindMap(String mindMapId){
+        db.setCurrentId(mindMapId);
+        db.loadNodes(new Runnable() {
+            @Override
+            public void run() {
+                String nodeJsonString = db.getPost();
+                // nodeJsonString 값을 MinMapEditorActiviy 에 넘겨주고 거기서  밑에 껄 실행하면 될듯?
+                Node rootNode = db.CreateNode(nodeJsonString, null);
             }
         });
     }
