@@ -39,11 +39,23 @@ public class SaveNodeFirebase {
 
     public String createNewMindMapId(){
         // 랜덤 id값 만든후 검사 무한반복
-        return "hello";
+        StringBuffer stringBuffer = new StringBuffer();
+        Random rnd = new Random();
+        for (int i = 0; i < 32; i++) {
+            int rIndex = rnd.nextInt(3);
+            if(rIndex == 0)
+                stringBuffer.append((char) ((int) (rnd.nextInt(26)) + 97));
+            else if(rIndex == 1)
+                stringBuffer.append((char) ((int) (rnd.nextInt(26)) + 65));
+            else
+                stringBuffer.append((rnd.nextInt(10)));
+        }
+
+        return stringBuffer.toString();
     }
 
     public void readAllMindMapInfo(final Runnable callback){
-        mDatabase.child("users").child("1").addValueEventListener(new ValueEventListener() {
+        mDatabase.child("users").child(getUserId()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Log.d("test mindmap", dataSnapshot.getValue().toString());
@@ -77,11 +89,11 @@ public class SaveNodeFirebase {
     }
 
     public void writeMindMapExplain(String explain){
-        mDatabase.child("users").child("1").child(currentId).child("explain").setValue(explain);
+        mDatabase.child("users").child(getUserId()).child(currentId).child("explain").setValue(explain);
     }
 
     public void writeMineMapImage(String image){
-        mDatabase.child("users").child("1").child(currentId).child("image").setValue(image);
+        mDatabase.child("users").child(getUserId()).child(currentId).child("image").setValue(image);
     }
 
     public String getPost()
@@ -136,7 +148,7 @@ public class SaveNodeFirebase {
             e.printStackTrace();
         }
 
-        writeJson("1", jsonObject);
+        writeJson(getUserId(), jsonObject);
     }
 
     public JSONObject createJsonNodes(Node node) throws JSONException {
@@ -159,7 +171,7 @@ public class SaveNodeFirebase {
     }
 
     private void readNodes(final Runnable callback){
-        mDatabase.child("users").child("1").child(currentId).child("nodes").addValueEventListener(new ValueEventListener() {
+        mDatabase.child("users").child(getUserId()).child(currentId).child("nodes").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.getValue(String.class) != null){
@@ -196,5 +208,9 @@ public class SaveNodeFirebase {
                     }
                 });
 
+    }
+
+    private String getUserId(){
+        return UserInfo.getInstance().getUserId();
     }
 }
