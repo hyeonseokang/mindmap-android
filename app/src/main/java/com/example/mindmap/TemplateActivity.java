@@ -37,20 +37,33 @@ public class TemplateActivity extends AppCompatActivity {
             }
         });
 
-        ArrayList<String> templates = new ArrayList<String>();
-        templates.add("마인드맵");
+        ArrayList<IdeaTemplate> templates = new ArrayList<>();
+        templates.add(new IdeaTemplate("마인드맵", "지도를 그리듯 자유로운 편집이 가능한 템플릿"));
 
-        RecyclerView recyclerView = findViewById(R.id.templateRecycler);
+        final RecyclerView recyclerView = findViewById(R.id.templateRecycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        TemplateAdapter adapter = new TemplateAdapter(templates);
+        final TemplateAdapter adapter = new TemplateAdapter(templates);
         recyclerView.setAdapter(adapter);
 
         adapter.setOnItemClickListener(new TemplateAdapter.OnItemClickListener() {
             @Override
             public void OnItemCLick(View v, int pos) {
-               Intent intent = new Intent(TemplateActivity.this, CreateActivity.class);
-               startActivity(intent);
+            }
+        });
+
+        Button selectTemplate;
+        selectTemplate = findViewById(R.id.selectTemplateButton);
+        selectTemplate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(adapter.getSelected() != -1) {
+                    Intent intent = new Intent(TemplateActivity.this, CreateActivity.class);
+                    startActivity(intent);
+                }
+                else{
+                    Toast.makeText(TemplateActivity.this, "템플릿을 선택하세요.", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }

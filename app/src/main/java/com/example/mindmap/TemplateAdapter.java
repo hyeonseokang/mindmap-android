@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -12,9 +13,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 public class TemplateAdapter  extends RecyclerView.Adapter<TemplateAdapter.ViewHolder> {
-    ArrayList<String> templates = null;
+    ArrayList<IdeaTemplate> templates = null;
 
     private TemplateAdapter.OnItemClickListener listener = null;
+    private int selected = -1;
 
     public interface OnItemClickListener{
         void OnItemCLick(View v, int pos);
@@ -26,11 +28,15 @@ public class TemplateAdapter  extends RecyclerView.Adapter<TemplateAdapter.ViewH
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView templateName ;
+        TextView templateDescription ;
+        ImageView check;
 
         ViewHolder(View itemView) {
             super(itemView) ;
 
             templateName = itemView.findViewById(R.id.templateNameText) ;
+            templateDescription = itemView.findViewById(R.id.templateDescriptionText) ;
+            check = itemView.findViewById(R.id.checkImage);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -38,6 +44,16 @@ public class TemplateAdapter  extends RecyclerView.Adapter<TemplateAdapter.ViewH
                     int pos = getAdapterPosition() ;
                     if (pos != RecyclerView.NO_POSITION) {
                         if(listener != null){
+                            if(selected == pos){
+                                selected = -1;
+                                v.setBackgroundResource(0);
+                                check.setVisibility(View.GONE);
+                            }
+                            else{
+                                selected = pos;
+                                v.setBackgroundResource(R.drawable.style_select_item);
+                                check.setVisibility(View.VISIBLE);
+                            }
                             listener.OnItemCLick(v, pos);
                         }
                     }
@@ -46,7 +62,7 @@ public class TemplateAdapter  extends RecyclerView.Adapter<TemplateAdapter.ViewH
         }
     }
 
-    TemplateAdapter(ArrayList<String> list) {
+    TemplateAdapter(ArrayList<IdeaTemplate> list) {
         templates = list;
     }
 
@@ -64,12 +80,17 @@ public class TemplateAdapter  extends RecyclerView.Adapter<TemplateAdapter.ViewH
 
     @Override
     public void onBindViewHolder(@NonNull TemplateAdapter.ViewHolder holder, int position) {
-        String text = templates.get(position) ;
-        holder.templateName.setText(text) ;
+        String name = templates.get(position).name;
+        String description = templates.get(position).description;
+
+        holder.templateName.setText(name) ;
+        holder.templateDescription.setText(description);
     }
 
     @Override
     public int getItemCount() {
         return templates.size();
     }
+
+    public int getSelected() {return selected;}
 }
