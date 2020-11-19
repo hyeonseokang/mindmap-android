@@ -15,36 +15,42 @@
             android:id="@+id/btn_add"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="?android:selectableItemBackground"
             android:text="추가" />
 
         <Button
             android:id="@+id/btn_recommand"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="?android:selectableItemBackground"
             android:text="추천단어" />
 
         <Button
             android:id="@+id/btn_definition"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="?android:selectableItemBackground"
             android:text="뜻 보기" />
 
         <Button
             android:id="@+id/btn_edit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="?android:selectableItemBackground"
             android:text="편집" />
 
         <Button
             android:id="@+id/btn_move"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="?android:selectableItemBackground"
             android:text="이동" />
 
         <Button
             android:id="@+id/btn_remove"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="?android:selectableItemBackground"
             android:text="삭제" />
 
     </LinearLayout>

@@ -13,6 +13,7 @@ import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
@@ -77,6 +78,9 @@ public class ListActivity extends AppCompatActivity {
             }
         });
 
+        final TextView noResultText;
+        noResultText = findViewById(R.id.noResultText);
+
         final EditText search;
         search = findViewById(R.id.searchEditText);
         search.addTextChangedListener(new TextWatcher() {
@@ -90,7 +94,9 @@ public class ListActivity extends AppCompatActivity {
             public void onTextChanged(CharSequence seq, int start, int before, int count) {
                 String charText = seq.toString();
                 adapter.filter(charText);
-                Toast.makeText(ListActivity.this, Integer.toString(adapter.getItemCount()), Toast.LENGTH_SHORT).show();
+
+                if(adapter.getItemCount() == 0) noResultText.setVisibility(View.VISIBLE);
+                else  noResultText.setVisibility(View.GONE);
             }
         });
     }

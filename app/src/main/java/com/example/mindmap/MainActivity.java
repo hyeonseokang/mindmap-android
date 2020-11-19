@@ -16,7 +16,8 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-        Intent intent = new Intent(this, ListActivity.class);
+        //Intent intent = new Intent(this, ListActivity.class);
+        Intent intent = new Intent(this, MindMapEditorActivity.class);
         startActivity(intent);
     }
 }

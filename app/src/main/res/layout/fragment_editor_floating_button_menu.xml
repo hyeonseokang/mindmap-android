@@ -14,18 +14,21 @@
             android:id="@+id/btn_save"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="?android:selectableItemBackground"
             android:text="저장" />
 
         <Button
             android:id="@+id/btn_share"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="?android:selectableItemBackground"
             android:text="공유" />
 
         <Button
             android:id="@+id/btn_delete"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="?android:selectableItemBackground"
             android:text="삭제" />
     </LinearLayout>
 
