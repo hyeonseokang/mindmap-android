@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -31,6 +33,24 @@ public class CreateActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 finish();
+            }
+        });
+
+        final EditText startingWord;
+        startingWord = findViewById(R.id.startingWordEdit);
+
+        Button createIdea;
+        createIdea = findViewById(R.id.createIdeaButton);
+        createIdea.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(startingWord.getText().toString().length() == 0){
+                    Toast.makeText(CreateActivity.this, "주제를 입력하세요.", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    Intent intent = new Intent(CreateActivity.this, MindMapEditorActivity.class);
+                    startActivity(intent);
+                }
             }
         });
     }
