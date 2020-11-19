@@ -30,15 +30,32 @@ import java.util.Random;
 public class SaveNodeFirebase {
     private DatabaseReference mDatabase;
     private String post;
-    private int currentId;
+    private String currentId = "hello";
 
     public SaveNodeFirebase(){
         mDatabase = FirebaseDatabase.getInstance().getReference();
     }
 
-    public int createNewMindMapId(){
+    public String createNewMindMapId(){
         // 랜덤 id값 만든후 검사 무한반복
-        return 22;
+        return "hello";
+    }
+
+    // 처음 마인드맵 새로 만들때 쓰는 거
+    public void createNewMindMap(String startWord, String explain){
+        String id = this.createNewMindMapId(); // 새롭게 id 만들고
+        this.setCurrentId(id);
+        this.writeNodes(new Node(null, startWord)); // 노드 생성하고 데이터베이스 보내고
+        this.writeMindMapExplain(explain); // 설명 데이터베이스에 보내고
+        // id 는 createNewMindMapId() 넣으면 자동 동기화
+    }
+
+    public void writeMindMapExplain(String explain){
+        mDatabase.child("users").child("1").child(currentId).child("explain").setValue(explain);
+    }
+
+    public void writeMineMapImage(String image){
+        mDatabase.child("users").child("1").child(currentId).child("image").setValue(image);
     }
 
     public String getPost()
@@ -46,11 +63,11 @@ public class SaveNodeFirebase {
         return post;
     }
 
-    public void setCurrentId(int id){
+    public void setCurrentId(String id){
         currentId = id;
     }
 
-    public int getCurrentId(){
+    public String getCurrentId(){
         return currentId;
     }
 
@@ -60,11 +77,6 @@ public class SaveNodeFirebase {
         return post;
     }
 
-    /** CreateNode
-     * 개발자 : 고현성이 수정 예정
-     * 날짜 : 2020-11-18
-     */
-    // 버리는 메소드
     public Node CreateNode(String json, NodeFragment nodeFragment) {
         Node rootNode = null;
         try {
@@ -121,7 +133,7 @@ public class SaveNodeFirebase {
     }
 
     private void readNodes(final Runnable callback){
-        mDatabase.child("users").child("1").addValueEventListener(new ValueEventListener() {
+        mDatabase.child("users").child("1").child(currentId).child("nodes").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.getValue(String.class) != null){
@@ -144,7 +156,7 @@ public class SaveNodeFirebase {
 
     private void writeJson(String userId, JSONObject jsonObject) {
 
-        mDatabase.child("users").child(userId).setValue(jsonObject.toString())
+        mDatabase.child("users").child(userId).child(currentId).child("nodes").setValue(jsonObject.toString())
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -154,7 +166,7 @@ public class SaveNodeFirebase {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.d("실패", "실패");
+                        Log.d("쓰기 실패", "실패");
                     }
                 });
 

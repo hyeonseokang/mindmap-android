@@ -619,7 +619,6 @@ public class MindMapEditorActivity extends AppCompatActivity {
         prevX = prevY = -1;
 
         db = new SaveNodeFirebase();
-
         db.loadNodes(new Runnable() {
             @Override
             public void run() {
