@@ -18,6 +18,13 @@ public abstract class CrawlingThread extends Thread{
 
     public abstract void CompleteCrawling();
 
+    private void setNullToList(String key){
+        if (similarWords == null)
+            return;
+
+        if (similarWords.get(key) == null);
+    }
+
     @Override
     public void run(){
         if (searchWord == "")
@@ -25,10 +32,7 @@ public abstract class CrawlingThread extends Thread{
 
         try {
             SimilarWordCrawling();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
-            e.printStackTrace();
+        } catch(Exception e){
         }
         CompleteCrawling();
         searchWord = "";
@@ -50,8 +54,12 @@ public abstract class CrawlingThread extends Thread{
         similarWords.put("meaning", crawler.getWordMeaning(searchWord));
     }
 
-    public HashMap<String, ArrayList<String>> getSimilarWords(){
-        return similarWords;
+    public ArrayList<String> getSimilarWords(String key){
+        ArrayList<String> values = similarWords.get(key);
+        if(values == null)
+            return new ArrayList<>();
+
+        return values;
     }
 }
 
