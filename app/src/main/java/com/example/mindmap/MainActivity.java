@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
     private void updateUI(FirebaseUser user) {
         if (user != null) {
             UserInfo.getInstance().setUserId(user);
-            Intent intent = new Intent(this, MindMapEditorActivity.class);
+            Intent intent = new Intent(this, ListActivity.class);
             startActivity(intent);
             finish();
         }
@@ -49,8 +49,8 @@ public class MainActivity extends AppCompatActivity {
     public void googleLogin(){
         signInButton = findViewById(R.id.signInButton);
 
-
-        updateUI(mAuth.getCurrentUser());
+        FirebaseUser user = mAuth.getCurrentUser();
+        updateUI(user);
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))

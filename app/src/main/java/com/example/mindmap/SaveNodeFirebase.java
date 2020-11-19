@@ -162,6 +162,7 @@ public class SaveNodeFirebase {
     }
 
     private void readNodes(final Runnable callback){
+        Log.d("current id", currentId);
         mDatabase.child("users").child(getUserId()).child(currentId).child("nodes").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
