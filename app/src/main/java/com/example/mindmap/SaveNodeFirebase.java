@@ -19,6 +19,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * 개발자 : 20191546 강현서
@@ -29,9 +30,23 @@ import java.util.ArrayList;
 public class SaveNodeFirebase {
     private DatabaseReference mDatabase;
     private String post;
+    private int currentId;
 
     public SaveNodeFirebase(){
         mDatabase = FirebaseDatabase.getInstance().getReference();
+    }
+
+    public int createNewMindMapId(){
+        // 랜덤 id값 만든후 검사 무한반복
+        return 22;
+    }
+
+    public void setCurrentId(int id){
+        currentId = id;
+    }
+
+    public int getCurrentId(){
+        return currentId;
     }
 
     // 실제 사용하는 메소드
