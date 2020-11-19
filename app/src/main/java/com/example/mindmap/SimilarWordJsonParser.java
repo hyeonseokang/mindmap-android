@@ -18,6 +18,9 @@ import java.util.HashMap;
 
 public class SimilarWordJsonParser {
     public HashMap<String, ArrayList<String>> parsing(String jsonString) throws JSONException {
+        if(jsonString.equals("")){
+            return new HashMap<>();
+        }
         JSONObject jsonObject = new JSONObject(jsonString);
         JSONArray jsonArray = new JSONArray(jsonObject.getString("children"));
 

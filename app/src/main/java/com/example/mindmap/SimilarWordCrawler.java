@@ -51,10 +51,12 @@ public class SimilarWordCrawler {
     }
 
     private String parsingJson(ArrayList<String> links) throws IOException{
+        if(links.size() < 1)
+            return "";
         Document doc = Jsoup.connect(links.get(0)).get();
         Elements elements = doc.select("#wordmap_json_str");
-
-        String jsonFile = elements.get(0).text();
+        String jsonFile = "";
+        jsonFile = elements.get(0).text();
 
         return jsonFile;
     }

@@ -210,7 +210,7 @@ public class MindMapEditorActivity extends AppCompatActivity {
                 try {
                     crawling.join();
 
-                    ArrayList<String> words = crawling.getSimilarWords().get("비슷한말");
+                    ArrayList<String> words = crawling.getSimilarWords("비슷한말");
                     if (words.size() == 0)
                     {
                         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
@@ -277,8 +277,26 @@ public class MindMapEditorActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
                 AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-                ArrayList<String> words = crawling.getSimilarWords().get("meaning");
-                
+                ArrayList<String> words = crawling.getSimilarWords("meaning");
+                if (words.size() == 0)
+                {
+                    builder.setTitle("알림").setMessage("단어를 찾을수 없습니다.");
+
+                    builder.setPositiveButton("확인", new DialogInterface.OnClickListener(){
+                        @Override
+                        public void onClick(DialogInterface dialog, int id)
+                        {
+
+                        }
+                    });
+
+                    AlertDialog alertDialog = builder.create();
+                    alertDialog.show();
+
+                    dialog.dismiss();
+
+                    return;
+                }
                 String wordMean = "";
                 for (int i=0;i<words.size();i++){
                     wordMean = wordMean + (i+1) + ". " + words.get(i) + "\n";
