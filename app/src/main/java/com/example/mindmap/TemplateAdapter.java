@@ -30,7 +30,7 @@ public class TemplateAdapter  extends RecyclerView.Adapter<TemplateAdapter.ViewH
         ViewHolder(View itemView) {
             super(itemView) ;
 
-            templateName = itemView.findViewById(R.id.templateName) ;
+            templateName = itemView.findViewById(R.id.templateNameText) ;
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
