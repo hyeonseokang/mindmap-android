@@ -16,7 +16,7 @@
         android:text="뒤로"
         android:textColor="#000000"
         android:textSize="16sp"
-        app:layout_constraintBottom_toTopOf="@+id/createTemplateImage"
+        app:layout_constraintBottom_toTopOf="@+id/exampleLayout"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent">
     </Button>
@@ -28,41 +28,83 @@
         android:text="아이디어 만들기"
         android:textColor="#000000"
         android:textSize="16sp"
-        app:layout_constraintBottom_toTopOf="@+id/createTemplateImage"
+        app:layout_constraintBottom_toTopOf="@+id/exampleLayout"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent">
     </TextView>
 
     <Button
-        android:id="@+id/createButton"
+        android:id="@+id/createIdeaButton"
         android:layout_width="40dp"
         android:layout_height="wrap_content"
         android:layout_marginRight="10dp"
         android:background="@null"
         android:text="다음"
         android:textColor="#929DFF"
-        app:layout_constraintBottom_toTopOf="@+id/createTemplateImage"
+        app:layout_constraintBottom_toTopOf="@+id/exampleLayout"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent">
     </Button>
 
-    <ImageView
-        android:id="@+id/createTemplateImage"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/exampleLayout"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="64dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
         app:layout_constraintTop_toTopOf="parent">
-    </ImageView>
+
+        <ImageView
+            android:id="@+id/createTemplateImage"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:paddingTop=""
+            android:src="@drawable/mindmap_example"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"></ImageView>
+
+        <TextView
+            android:id="@+id/createTemplateNameText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="마인드맵"
+            android:textSize="16sp"
+            android:textColor="#000000"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp"
+            android:layout_marginLeft="17dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/createTemplateImage">
+        </TextView>
+
+        <TextView
+            android:id="@+id/createTemplateDescriptionText"
+            android:layout_width="225dp"
+            android:layout_height="wrap_content"
+            android:text="지도를 그리듯 자유로운 편집이 가능한 템플릿"
+            android:layout_marginTop="15dp"
+            android:textSize="16sp"
+            android:textColor="#000000"
+            android:layout_marginLeft="17dp"
+            app:layout_constraintTop_toBottomOf="@id/createTemplateNameText"
+            app:layout_constraintStart_toEndOf="@+id/createTemplateImage">
+        </TextView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     <EditText
         android:id="@+id/startingWordEdit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="주제"
+        android:layout_marginTop="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        app:layout_constraintTop_toBottomOf="@+id/createTemplateImage"
+        app:layout_constraintTop_toBottomOf="@+id/exampleLayout"
         tools:layout_editor_absoluteX="16dp">
     </EditText>
 
@@ -72,7 +114,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:hint="설명"
+        android:hint="설명 (선택사항)"
         app:layout_constraintTop_toBottomOf="@+id/startingWordEdit"
         tools:layout_editor_absoluteX="16dp">
     </EditText>
