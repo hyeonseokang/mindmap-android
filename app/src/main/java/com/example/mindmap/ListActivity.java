@@ -35,11 +35,29 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Array;
+import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Locale;
+import java.util.Random;
 
 public class ListActivity extends AppCompatActivity {
-
-    final ArrayList<MindMapData> data = new ArrayList<>();
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -50,7 +68,10 @@ public class ListActivity extends AppCompatActivity {
         window.setStatusBarColor(Color.BLACK);
         setContentView(R.layout.activity_list);
 
-        loadData();
+        registerAlarm();
+
+        final ArrayList<String> data = new ArrayList<>();
+        final ArrayList<String> items = null;
 
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -126,19 +147,13 @@ public class ListActivity extends AppCompatActivity {
         return super.dispatchTouchEvent(ev);
     }
 
-    public void loadData()
+    public void registerAlarm()
     {
-        final SaveNodeFirebase db = new SaveNodeFirebase();
-
-        db.readAllMindMapInfo(new Runnable() {
-            @Override
-            public void run() {
-                for(int i=0; i < db.mindMapdataList.size(); i++){
-                    MindMapData mindMapData = db.mindMapdataList.get(i);
-
-                    data.add((mindMapData));
-                }
-            }
-        });
+//        ComponentName receiver = new ComponentName(getApplicationContext(), BootReceiver.class);
+//        PackageManager pm = getPackageManager();
+//
+//        pm.setComponentEnabledSetting(receiver,
+//                PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+//                PackageManager.DONT_KILL_APP);
     }
 }
