@@ -55,6 +55,8 @@ public abstract class CrawlingThread extends Thread{
     }
 
     public ArrayList<String> getSimilarWords(String key){
+        if (similarWords==null)
+            return new ArrayList<>();
         ArrayList<String> values = similarWords.get(key);
         if(values == null)
             return new ArrayList<>();

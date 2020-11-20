@@ -8,10 +8,17 @@
     tools:context=".MainActivity">
 
     <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/main_logo"
+        android:layout_marginBottom="150dp"/>
+
+    <ImageView
         android:id="@+id/iv_glide"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp" />
+        android:layout_marginTop="450dp" />
 
     <com.google.android.gms.common.SignInButton
         android:id="@+id/signInButton"

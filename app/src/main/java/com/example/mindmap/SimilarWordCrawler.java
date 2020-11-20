@@ -1,5 +1,7 @@
 package com.example.mindmap;
 
+import android.util.Log;
+
 import org.json.JSONException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -21,6 +23,7 @@ public class SimilarWordCrawler {
     private XmlParser xmlParser;
     private SimilarWordJsonParser jsonParser;
     private org.w3c.dom.Document doc;
+    private Document doc2;
 
     public SimilarWordCrawler(String baseUrl){
         this.baseUrl = baseUrl;
@@ -32,8 +35,19 @@ public class SimilarWordCrawler {
     public HashMap<String, ArrayList<String>> crawling(String word) throws JSONException, IOException {
         ArrayList<String> links = getLink(word);
         String jsonFile = parsingJson(links);
+        HashMap<String, ArrayList<String>> map = new HashMap<>();
 
-        HashMap<String, ArrayList<String>> map = jsonParser.parsing(jsonFile);
+        if(jsonFile == null){
+            ArrayList<String> mean = new ArrayList<>();
+            String wordMean = doc2.selectFirst("#content > div.cont_box_lr.group > div.section.floatL > div.group.mt30 > div > div > div.search_view_list.group.mt30 > dl:nth-child(1) > dt > span.word_dis").text();
+            mean.add(wordMean);
+            map.put("meaning",mean);
+        }
+        else{
+            map = jsonParser.parsing(jsonFile);
+            Log.d("Map Test", map.toString());
+        }
+
 
         return map;
     }
@@ -54,10 +68,14 @@ public class SimilarWordCrawler {
         if(links.size() < 1)
             return "";
         Document doc = Jsoup.connect(links.get(0)).get();
+        doc2 = doc;
         Elements elements = doc.select("#wordmap_json_str");
         String jsonFile = "";
-        jsonFile = elements.get(0).text();
 
+        if(elements.size() ==0)
+            return null;
+
+        jsonFile = elements.get(0).text();
         return jsonFile;
     }
 }

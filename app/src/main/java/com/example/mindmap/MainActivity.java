@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -46,8 +48,8 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void googleLogin(){
-        signInButton = findViewById(R.id.signInButton);
 
+        mAuth.signOut();
         FirebaseUser user = mAuth.getCurrentUser();
         updateUI(user);
 
@@ -71,6 +73,11 @@ public class MainActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
 
+        signInButton = findViewById(R.id.signInButton);
+        TextView textView = (TextView) signInButton.getChildAt(0);
+        textView.setText("Sign in with Google");
+
+        Log.d("TestTest", findViewById(R.id.signInButton).toString());
         mAuth = FirebaseAuth.getInstance();
         googleLogin();
         //Intent intent = new Intent(this, ListActivity.class);
