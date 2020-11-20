@@ -1,22 +1,31 @@
 package com.example.mindmap;
 
+import android.Manifest;
 import android.app.AlarmManager;
+import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
+import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Rect;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
@@ -28,18 +37,29 @@ import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.database.DatabaseReference;
+
+import java.io.OutputStream;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.StringTokenizer;
 
 public class ListActivity extends AppCompatActivity {
 
-    final ArrayList<MindMapData> data = new ArrayList<>();
+    int selectedPos = -1;
+    final SaveNodeFirebase db = new SaveNodeFirebase();
+    String imageStr = "";
+    String selectedId = "";
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -52,58 +72,12 @@ public class ListActivity extends AppCompatActivity {
 
         loadData();
 
-        RecyclerView recyclerView = findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        final MindMapAdapter adapter = new MindMapAdapter(data);
-        recyclerView.setAdapter(adapter);
-
-        adapter.setOnItemClickListener(new MindMapAdapter.OnItemClickListener() {
-            @Override
-            public void OnItemCLick(View v, int pos) {
-                Toast.makeText(ListActivity.this, Integer.toString(pos), Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        adapter.setOnOptionClickListener(new MindMapAdapter.OnOptionClickListener() {
-            @Override
-            public void OnOptionClick(View v, int pos) {
-                final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(ListActivity.this);
-                bottomSheetDialog.setContentView(R.layout.bottom_sheet_list);
-                bottomSheetDialog.show();
-
-                Toast.makeText(ListActivity.this, Integer.toString(pos), Toast.LENGTH_SHORT).show();
-            }
-        });
-
         FloatingActionButton fab = findViewById(R.id.addFab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(ListActivity.this, TemplateActivity.class);
                 startActivity(intent);
-            }
-        });
-
-        final TextView noResultText;
-        noResultText = findViewById(R.id.noResultText);
-
-        final EditText search;
-        search = findViewById(R.id.searchEditText);
-        search.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
-
-            @Override
-            public void afterTextChanged(Editable editable) {}
-
-            @Override
-            public void onTextChanged(CharSequence seq, int start, int before, int count) {
-                String charText = seq.toString();
-                adapter.filter(charText);
-
-                if(adapter.getItemCount() == 0) noResultText.setVisibility(View.VISIBLE);
-                else  noResultText.setVisibility(View.GONE);
             }
         });
     }
@@ -126,19 +100,72 @@ public class ListActivity extends AppCompatActivity {
         return super.dispatchTouchEvent(ev);
     }
 
-    public void loadData()
-    {
-        final SaveNodeFirebase db = new SaveNodeFirebase();
-
-        db.readAllMindMapInfo(new Runnable() {
+    public void loadData() {
+        Runnable r = new Runnable() {
             @Override
             public void run() {
-                for(int i=0; i < db.mindMapdataList.size(); i++){
-                    MindMapData mindMapData = db.mindMapdataList.get(i);
+                final ArrayList<MindMapData> data = new ArrayList<>();
+                data.addAll(db.mindMapdataList);
 
-                    data.add((mindMapData));
-                }
+                RecyclerView recyclerView = findViewById(R.id.recyclerView);
+                recyclerView.setLayoutManager(new LinearLayoutManager(ListActivity.this));
+
+                final MindMapAdapter adapter = new MindMapAdapter(data);
+                recyclerView.setAdapter(adapter);
+
+                adapter.setOnItemClickListener(new MindMapAdapter.OnItemClickListener() {
+                    @Override
+                    public void OnItemCLick(View v, int pos) {
+                        Intent intent = new Intent(ListActivity.this, MindMapEditorActivity.class);
+                        intent.putExtra("currentId",adapter.filteredData.get(pos).getId());
+                        startActivity(intent);
+                    }
+                });
+
+                adapter.setOnOptionClickListener(new MindMapAdapter.OnOptionClickListener() {
+                    @Override
+                    public void OnOptionClick(View v, int pos) {
+                        final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(ListActivity.this);
+                        bottomSheetDialog.setContentView(R.layout.bottom_sheet_list);
+                        //bottomSheetDialog.show();
+
+                        new ListFragment().show(getSupportFragmentManager(), "Dialog");
+
+                        selectedPos = pos;
+                        imageStr = adapter.filteredData.get(selectedPos).getImage();
+                        selectedId = adapter.filteredData.get(selectedPos).getId();
+                    }
+                });
+
+                LayoutInflater layoutInflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                View bottomSheet = layoutInflater.inflate(R.layout.bottom_sheet_list, null);
+
+                adapter.filter("");
+
+                final TextView noResultText;
+                noResultText = findViewById(R.id.noResultText);
+
+                final EditText search;
+                search = findViewById(R.id.searchEditText);
+                search.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+                    @Override
+                    public void afterTextChanged(Editable editable) {}
+
+                    @Override
+                    public void onTextChanged(CharSequence seq, int start, int before, int count) {
+                        String charText = seq.toString();
+                        adapter.filter(charText);
+
+                        if(adapter.getItemCount() == 0) noResultText.setVisibility(View.VISIBLE);
+                        else  noResultText.setVisibility(View.GONE);
+                    }
+                });
             }
-        });
+        };
+
+        db.readAllMindMapInfo(r);
     }
 }
