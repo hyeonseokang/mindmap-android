@@ -10,10 +10,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link NodeMenuFragment#newInstance} factory method to
- * create an instance of this fragment.
+/*
+개발자: 고현성
+파일 생성 날짜: 11/19
  */
 public class NodeMenuFragment extends Fragment {
 

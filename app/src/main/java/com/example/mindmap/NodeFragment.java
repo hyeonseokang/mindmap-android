@@ -17,11 +17,9 @@ import org.w3c.dom.Text;
 
 import java.util.Random;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link NodeFragment#newInstance} factory method to
- * create an instance of this fragment.
- *
+/*
+개발자: 고현성
+파일 생성 날짜: 11/18
  */
 public class NodeFragment extends Fragment {
 
