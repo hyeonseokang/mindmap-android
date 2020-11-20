@@ -34,7 +34,6 @@ public class MainActivity extends AppCompatActivity {
     private static final int RC_SIGN_IN = 9001;
     private SignInButton signInButton;
 
-
     // 요 부분에서 로그인후 넘어갈 Activity 지정하면 됨
     private void updateUI(FirebaseUser user) {
         if (user != null) {
@@ -135,7 +134,7 @@ class TestGetMindMap{
         db.setCurrentId(id);
         db.writeNodes(new Node(null, startWord)); // 노드 생성하고 데이터베이스 보내고
         db.writeMindMapExplain(explain); // 설명 데이터베이스에 보내고
-        db.writeMindMapExplain(null); // 이미지 임시로 null 값 보내고
+        db.writeMindMapExplain(null); // 이미지 임시로 null 값 보내
         // id 는 createNewMindMapId() 넣으면 자동 동기화
     }
 

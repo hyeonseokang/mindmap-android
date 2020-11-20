@@ -1,5 +1,6 @@
 package com.example.mindmap;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
@@ -19,6 +20,8 @@ import java.util.ArrayList;
 
 public class TemplateActivity extends AppCompatActivity {
 
+    public static Activity activity;
+
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +30,8 @@ public class TemplateActivity extends AppCompatActivity {
         Window window = getWindow();
         window.setStatusBarColor(Color.BLACK);
         setContentView(R.layout.activity_template);
+
+        activity = TemplateActivity.this;
 
         Button backButton;
         backButton = findViewById(R.id.backButton);

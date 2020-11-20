@@ -22,6 +22,7 @@ import org.json.JSONObject;
 public class CreateActivity extends AppCompatActivity {
 
     SaveNodeFirebase db = new SaveNodeFirebase();
+    TemplateActivity templateActivity = (TemplateActivity)TemplateActivity.activity;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -61,6 +62,9 @@ public class CreateActivity extends AppCompatActivity {
                     Intent intent = new Intent(CreateActivity.this, MindMapEditorActivity.class);
                     intent.putExtra("currentId", db.getCurrentId());
                     startActivity(intent);
+
+                    templateActivity.finish();
+                    finish();
                 }
             }
         });
@@ -89,7 +93,7 @@ public class CreateActivity extends AppCompatActivity {
         db.setCurrentId(id);
         db.writeNodes(new Node(null, startWord)); // 노드 생성하고 데이터베이스 보내고
         db.writeMindMapExplain(explain); // 설명 데이터베이스에 보내고
-        db.writeMindMapExplain(null); // 이미지 임시로 null 값 보내고
+        db.writeMineMapImage(null);
         // id 는 createNewMindMapId() 넣으면 자동 동기화
     }
 }
