@@ -64,9 +64,11 @@ public class SaveNodeFirebase {
                     Log.d("test22", postSnapshot.getKey());
                     String id = postSnapshot.getKey();
                     String explain = postSnapshot.child("explain").getValue(String.class);
+                    String jsonString = postSnapshot.child("nodes").getValue(String.class);
                     String image = postSnapshot.child("image").getValue(String.class);
+                    Node rootNode = CreateNode(jsonString, null);
 
-                    MindMapData mindMapData = new MindMapData(id, image, explain);
+                    MindMapData mindMapData = new MindMapData(id, image, explain, rootNode);
                     mindMapdataList.add(mindMapData);
                 }
                 callback.run();
