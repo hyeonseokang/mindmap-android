@@ -58,7 +58,6 @@ public class SaveNodeFirebase {
         mDatabase.child("users").child(getUserId()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Log.d("test mindmap", dataSnapshot.getValue().toString());
                 mindMapdataList.clear();
                 for (DataSnapshot postSnapshot: dataSnapshot.getChildren()){
                     Log.d("test22", postSnapshot.getKey());
