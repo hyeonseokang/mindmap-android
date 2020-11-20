@@ -17,6 +17,13 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
+/**
+ * 개발자 : 20191583 나민형
+ * 마지막 수정일 : 2020-11-20
+ * 기능 : recycleview 의 어댑터
+ * 추가 설명 : 마인드맵 미리보기, 주제, 루트 노드, 자식 노드, 설명, 옵션 버튼을 표시함
+ */
+
 public class MindMapAdapter extends RecyclerView.Adapter<MindMapAdapter.ViewHolder>
 {
     ArrayList<MindMapData> data = new ArrayList<>();

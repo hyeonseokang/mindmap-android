@@ -54,6 +54,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
+/**
+ * 개발자 : 20191583 나민형
+ * 마지막 수정일 : 2020-11-20
+ * 기능 : 시작 액티비티, 지금까지 만든 마인드맵이 리스트로 표시됨
+ * 추가 설명 : 공유, 삭제, 편집 가능
+ */
+
 public class ListActivity extends AppCompatActivity {
 
     int selectedPos = -1;

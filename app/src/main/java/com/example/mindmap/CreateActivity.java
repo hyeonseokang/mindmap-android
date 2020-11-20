@@ -25,6 +25,13 @@ import org.json.JSONObject;
 
 import java.io.OutputStream;
 
+/**
+ * 개발자 : 20191583 나민형
+ * 마지막 수정일 : 2020-11-20
+ * 기능 : 마인드맵 생성 액티비티
+ * 추가 설명 : 주제, 설명 입력 후 마인드맵 생성
+ */
+
 public class CreateActivity extends AppCompatActivity {
 
     SaveNodeFirebase db = new SaveNodeFirebase();

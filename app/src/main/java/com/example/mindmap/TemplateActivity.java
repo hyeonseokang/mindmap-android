@@ -18,6 +18,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
+/**
+ * 개발자 : 20191583 나민형
+ * 마지막 수정일 : 2020-11-20
+ * 기능 : 템플릿 선택 액티비티
+ * 추가 설명 : 아이디어 구상에 선택할 템플릿을 선택하는 액티비티
+ */
+
 public class TemplateActivity extends AppCompatActivity {
 
     public static Activity activity;

@@ -16,6 +16,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
+/**
+ * 개발자 : 20191583 나민형
+ * 마지막 수정일 : 2020-11-20
+ * 기능 : 푸쉬 알람
+ * 추가 설명 : koreans2 txt 파일에서 랜덤한 단어를 골라, 매일 아침 9시 (BootReceiver 참고) 에 푸쉬 알림을 보냄, 클릭 시 앱 이동
+ */
+
 import static android.content.Context.NOTIFICATION_SERVICE;
 
 public class AlarmReceiver extends BroadcastReceiver {

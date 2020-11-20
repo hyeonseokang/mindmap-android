@@ -12,6 +12,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
+/**
+ * 개발자 : 20191583 나민형
+ * 마지막 수정일 : 2020-11-20
+ * 기능 : 템플릿 recycle view의 어댑터
+ * 추가 설명 : 템플릿 이름, 설명, 선택 여부 표시
+ */
+
 public class TemplateAdapter  extends RecyclerView.Adapter<TemplateAdapter.ViewHolder> {
     ArrayList<IdeaTemplate> templates = null;
 

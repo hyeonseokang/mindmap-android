@@ -11,6 +11,13 @@ import java.util.Calendar;
 
 import static android.content.Context.ALARM_SERVICE;
 
+/**
+ * 개발자 : 20191583 나민형
+ * 마지막 수정일 : 2020-11-19
+ * 기능 : 부팅 시 broadcast 시작
+ * 추가 설명 : 매일 9시에 푸쉬알람을 보내는 데에 있어, 사용자가 앱을 실행하지 않거나 재부팅한 상태에서도 푸쉬 알림을 보냄
+ */
+
 public class BootReceiver extends BroadcastReceiver {
 
     @Override

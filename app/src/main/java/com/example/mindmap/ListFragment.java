@@ -16,6 +16,12 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import java.io.OutputStream;
 
+/**
+ * 개발자 : 20191583 나민형
+ * 마지막 수정일 : 2020-11-20
+ * 기능 : 리스트 아래의 bottom sheet 의 기능을 정의, 공유 및 삭제
+ */
+
 public class ListFragment extends BottomSheetDialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
