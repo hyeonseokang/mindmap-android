@@ -17,7 +17,6 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.InputType;
 import android.util.Base64;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -544,7 +543,7 @@ public class MindMapEditorActivity extends AppCompatActivity {
     }
 
     // 마인드맵 공유
-    public void shareMipmap()
+    public void shareMindMap()
     {
         Bitmap icon = captureMindMap();
         Intent share = new Intent(Intent.ACTION_SEND);
@@ -567,6 +566,12 @@ public class MindMapEditorActivity extends AppCompatActivity {
 
         share.putExtra(Intent.EXTRA_STREAM, uri);
         startActivity(Intent.createChooser(share, "Share Image"));
+    }
+
+    public void save()
+    {
+        db.writeNodes(getRootNode());
+        db.writeMineMapImage(captureMipMapAsBase64());
     }
 
     @Override
@@ -609,7 +614,7 @@ public class MindMapEditorActivity extends AppCompatActivity {
                 btnSave.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        db.writeNodes(getRootNode());
+                        save();
                         dialog.dismiss();
                     }
                 });
@@ -618,7 +623,7 @@ public class MindMapEditorActivity extends AppCompatActivity {
                 btnShare.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        shareMipmap();
+                        shareMindMap();
                         dialog.dismiss();
                     }
                 });
@@ -645,7 +650,7 @@ public class MindMapEditorActivity extends AppCompatActivity {
                 builder.setPositiveButton("예", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        db.writeNodes(getRootNode());
+                        save();
                         activity.finish();
                     }
                 });
