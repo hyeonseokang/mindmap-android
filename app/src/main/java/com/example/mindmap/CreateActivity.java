@@ -16,7 +16,12 @@ import android.widget.Toast;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class CreateActivity extends AppCompatActivity {
+
+    SaveNodeFirebase db = new SaveNodeFirebase();
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -39,6 +44,9 @@ public class CreateActivity extends AppCompatActivity {
         final EditText startingWord;
         startingWord = findViewById(R.id.startingWordEdit);
 
+        final EditText descriptionEdit;
+        descriptionEdit = findViewById(R.id.descriptionEdit);
+
         Button createIdea;
         createIdea = findViewById(R.id.createIdeaButton);
         createIdea.setOnClickListener(new View.OnClickListener() {
@@ -48,7 +56,10 @@ public class CreateActivity extends AppCompatActivity {
                     Toast.makeText(CreateActivity.this, "주제를 입력하세요.", Toast.LENGTH_SHORT).show();
                 }
                 else{
+                    createNewMindMap(startingWord.getText().toString(), descriptionEdit.getText().toString());
+
                     Intent intent = new Intent(CreateActivity.this, MindMapEditorActivity.class);
+                    intent.putExtra("currentId", db.getCurrentId());
                     startActivity(intent);
                 }
             }
@@ -71,5 +82,14 @@ public class CreateActivity extends AppCompatActivity {
         }
 
         return super.dispatchTouchEvent(ev);
+    }
+
+    public void createNewMindMap(String startWord, String explain){
+        String id = db.createNewMindMapId(); // 새롭게 id 만들고
+        db.setCurrentId(id);
+        db.writeNodes(new Node(null, startWord)); // 노드 생성하고 데이터베이스 보내고
+        db.writeMindMapExplain(explain); // 설명 데이터베이스에 보내고
+        db.writeMindMapExplain(null); // 이미지 임시로 null 값 보내고
+        // id 는 createNewMindMapId() 넣으면 자동 동기화
     }
 }
