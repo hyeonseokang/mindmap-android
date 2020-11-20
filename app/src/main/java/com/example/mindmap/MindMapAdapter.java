@@ -18,8 +18,8 @@ import java.util.ArrayList;
 
 public class MindMapAdapter extends RecyclerView.Adapter<MindMapAdapter.ViewHolder>
 {
-    ArrayList<String> data = new ArrayList<>();
-    ArrayList<String> descriptions =  new ArrayList<>();
+    ArrayList<MindMapData> data = new ArrayList<>();
+    ArrayList<MindMapData> filteredData = new ArrayList<>();
 
     private OnItemClickListener listener = null;
     private OnOptionClickListener optionistener = null;
@@ -42,6 +42,8 @@ public class MindMapAdapter extends RecyclerView.Adapter<MindMapAdapter.ViewHold
 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
+        TextView startingWordText;
+        TextView wordsText;
         TextView descriptionText ;
         ImageButton optionButton;
 
@@ -77,9 +79,8 @@ public class MindMapAdapter extends RecyclerView.Adapter<MindMapAdapter.ViewHold
         }
     }
 
-    MindMapAdapter(ArrayList<String> list) {
+    MindMapAdapter(ArrayList<MindMapData> list) {
         data.addAll(list);
-        descriptions.addAll(list);
     }
 
     @NonNull
@@ -96,25 +97,35 @@ public class MindMapAdapter extends RecyclerView.Adapter<MindMapAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull MindMapAdapter.ViewHolder holder, int position) {
-        String text = descriptions.get(position) ;
-        holder.descriptionText.setText(text) ;
+        MindMapData mindMapData = data.get(position) ;
+
+        String children = "";
+        for(int i = 0; i < mindMapData.getRootNode().children.size(); i++){
+            children += mindMapData.getRootNode().children.get(i).text + ", ";
+        }
+        children = children.substring(0, children.length() - 1);
+
+        holder.startingWordText.setText(mindMapData.getRootNode().text);
+        holder.wordsText.setText(children) ;
+        holder.descriptionText.setText(mindMapData.getExplain()) ;
+        holder.optionButton.setImageBitmap(MindMapEditorActivity.convertBase64ToBitmap(mindMapData.getImage())); ;
     }
 
     @Override
     public int getItemCount() {
-        return descriptions.size();
+        return filteredData.size();
     }
 
     public void filter(String filterStr){
-        descriptions.clear();
+        filteredData.clear();
 
         if (filterStr.length() == 0) {
-            descriptions.addAll(data);
+            filteredData.addAll(data);
         }
         else {
-            for (String str : data) {
-                if (str.contains(filterStr)) {
-                    descriptions.add(str);
+            for (MindMapData data_i : data) {
+                if (data_i.getExplain().contains(filterStr)) {
+                    filteredData.add(data_i);
                 }
             }
         }
