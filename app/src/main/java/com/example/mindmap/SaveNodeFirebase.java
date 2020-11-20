@@ -35,6 +35,10 @@ public class SaveNodeFirebase {
         mDatabase = FirebaseDatabase.getInstance().getReference();
     }
 
+    public void clearDB(){
+        mDatabase.child("users").child(getUserId()).removeValue();
+    }
+
     public void removeMindeMap(String mindMapId){
         mDatabase.child("users").child(getUserId()).child(mindMapId).removeValue();
     }
