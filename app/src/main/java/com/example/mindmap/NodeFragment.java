@@ -19,7 +19,7 @@ import java.util.Random;
 
 /*
 개발자: 고현성
-파일 생성 날짜: 11/18
+파일 생성 날짜: 11/16
  */
 public class NodeFragment extends Fragment {
 

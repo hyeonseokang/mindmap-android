@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 
 /*
 개발자: 고현성
-파일 생성 날짜: 11/19
+파일 생성 날짜: 11/18
  */
 public class EditorFloatingButtonMenuFragment extends Fragment {
 

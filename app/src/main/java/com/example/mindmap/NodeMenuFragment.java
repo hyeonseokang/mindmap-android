@@ -12,7 +12,7 @@ import android.widget.Toast;
 
 /*
 개발자: 고현성
-파일 생성 날짜: 11/19
+파일 생성 날짜: 11/17
  */
 public class NodeMenuFragment extends Fragment {
 
