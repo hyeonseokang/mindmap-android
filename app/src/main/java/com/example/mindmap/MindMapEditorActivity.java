@@ -214,7 +214,7 @@ public class MindMapEditorActivity extends AppCompatActivity {
                 try {
                     crawling.join();
 
-                    ArrayList<String> words = crawling.getSimilarWords("비슷한말");
+                    ArrayList<String> words = crawling.getSimilarWords( "비슷한말");
                     if (words.size() == 0)
                     {
                         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
@@ -239,7 +239,7 @@ public class MindMapEditorActivity extends AppCompatActivity {
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(activity);
 
-                    builder.setTitle("추천단어");
+                    builder.setTitle(fragment.node.text + " 추천단어");
 
                     final String[] items = new String[words.size()];
                     words.toArray(items);
@@ -305,7 +305,7 @@ public class MindMapEditorActivity extends AppCompatActivity {
                 for (int i=0;i<words.size();i++){
                     wordMean = wordMean + (i+1) + ". " + words.get(i) + "\n";
                 }
-                builder.setTitle("뜻").setMessage(wordMean);
+                builder.setTitle(fragment.node.text + " 뜻").setMessage(wordMean);
 
                 builder.setPositiveButton("확인", new DialogInterface.OnClickListener(){
                     @Override
