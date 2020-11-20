@@ -2,6 +2,10 @@ package com.example.mindmap;
 
 import java.util.ArrayList;
 
+/*
+개발자: 고현성
+파일 생성 날짜: 11/17
+ */
 public class Node
 {
     public String text;

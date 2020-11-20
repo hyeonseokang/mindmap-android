@@ -8,10 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link EditorFloatingButtonMenuFragment#newInstance} factory method to
- * create an instance of this fragment.
+/*
+개발자: 고현성
+파일 생성 날짜: 11/18
  */
 public class EditorFloatingButtonMenuFragment extends Fragment {
 
