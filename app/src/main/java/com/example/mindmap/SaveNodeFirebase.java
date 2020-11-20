@@ -1,8 +1,6 @@
 package com.example.mindmap;
 
-import android.util.JsonReader;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -37,6 +35,30 @@ public class SaveNodeFirebase {
         mDatabase = FirebaseDatabase.getInstance().getReference();
     }
 
+    public void removeMindeMap(String mindMapId){
+        mDatabase.child("users").child(getUserId()).child(mindMapId).removeValue();
+    }
+
+    public void readImage(String mindMapId, final Runnable callback) {
+        mDatabase.child("users").child(getUserId()).child(mindMapId).child("image").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getValue(String.class) != null) {
+                    post = dataSnapshot.getValue(String.class);
+                    callback.run();
+                } else {
+                    Log.d("실패", "실패");
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.d("실패", "실패");
+            }
+        });
+    }
+    
     public String createNewMindMapId(){
         // 랜덤 id값 만든후 검사 무한반복
         StringBuffer stringBuffer = new StringBuffer();
