@@ -5,6 +5,11 @@ import android.util.Log;
 
 import com.google.firebase.auth.FirebaseUser;
 
+/**
+ * 개발자 : 20191546 강현서
+ * 날짜 : 2020-11-19
+ * 기능 : 로그인 정보 저장 Class
+ */
 public class UserInfo {
     private static UserInfo instance = null;
 

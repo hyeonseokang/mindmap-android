@@ -1,5 +1,11 @@
 package com.example.mindmap;
 
+
+/**
+ * 개발자 : 20191546 강현서
+ * 날짜 : 2020-11-19
+ * 기능 : MindMap 데이터를 저장하기위해 만든 Class
+ */
 public class MindMapData {
     private String id;
     private String image;

@@ -19,6 +19,7 @@
         <activity android:name=".ListActivity"></activity>
         <activity android:name=".TemplateActivity"></activity>
         <activity android:name=".CreateActivity"></activity>
+        <activity android:name=".UserInfoActivity" android:theme="@android:style/Theme.Dialog"></activity>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
