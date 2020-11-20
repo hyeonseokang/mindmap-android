@@ -25,6 +25,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -574,6 +575,8 @@ public class MindMapEditorActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_mind_map_editor);
 
+        getSupportActionBar().hide();
+
         randomFragmentMargins = new Random();
 
         mindMapLayout = findViewById(R.id.mind_map_layout);
@@ -632,11 +635,39 @@ public class MindMapEditorActivity extends AppCompatActivity {
             }
         });
 
+        ImageButton btnBack = findViewById(R.id.btn_back);
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+                builder.setMessage("저장하시겠습니까?");
+
+                builder.setPositiveButton("예", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        db.writeNodes(getRootNode());
+                        activity.finish();
+                    }
+                });
+                builder.setNegativeButton("아니오", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                        activity.finish();
+                    }
+                });
+
+                builder.show();
+            }
+        });
+
         nodeFragments = new ArrayList<>();
 
         prevX = prevY = -1;
 
         db = new SaveNodeFirebase();
+        db.setCurrentId(getIntent().getExtras().getString("currentId"));
+
         db.loadNodes(new Runnable() {
             @Override
             public void run() {
@@ -645,7 +676,7 @@ public class MindMapEditorActivity extends AppCompatActivity {
             }
         });
 
-        //addNode(null, "감자").makeRoot();
+        //addNode(null, "마인드맵").makeRoot();
     }
 
     @Override
