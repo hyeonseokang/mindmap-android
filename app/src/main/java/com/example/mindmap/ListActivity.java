@@ -77,6 +77,14 @@ public class ListActivity extends AppCompatActivity {
         window.setStatusBarColor(Color.BLACK);
         setContentView(R.layout.activity_list);
 
+        FloatingActionButton infoButton = findViewById(R.id.infoButton);
+        infoButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ListActivity.this, UserInfoActivity.class);
+                startActivity(intent);
+            }
+        });
         loadData();
 
         FloatingActionButton fab = findViewById(R.id.addFab);
