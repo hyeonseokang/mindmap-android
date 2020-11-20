@@ -1,10 +1,14 @@
 package com.example.mindmap;
 
+import android.content.ContentValues;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Rect;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
@@ -18,6 +22,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.OutputStream;
 
 public class CreateActivity extends AppCompatActivity {
 

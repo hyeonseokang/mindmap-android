@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -45,13 +46,17 @@ public class MindMapAdapter extends RecyclerView.Adapter<MindMapAdapter.ViewHold
         TextView startingWordText;
         TextView wordsText;
         TextView descriptionText ;
+        ImageView imageView;
         ImageButton optionButton;
 
         ViewHolder(View itemView) {
             super(itemView) ;
 
+            startingWordText = itemView.findViewById(R.id.startingWordText);
+            wordsText = itemView.findViewById(R.id.wordsText);
             descriptionText = itemView.findViewById(R.id.descriptionText) ;
             optionButton = itemView.findViewById(R.id.optionButton);
+            imageView = itemView.findViewById(R.id.prevImage);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -103,12 +108,13 @@ public class MindMapAdapter extends RecyclerView.Adapter<MindMapAdapter.ViewHold
         for(int i = 0; i < mindMapData.getRootNode().children.size(); i++){
             children += mindMapData.getRootNode().children.get(i).text + ", ";
         }
-        children = children.substring(0, children.length() - 1);
+        //children = children.substring(0, children.length() - 1);
 
         holder.startingWordText.setText(mindMapData.getRootNode().text);
         holder.wordsText.setText(children) ;
         holder.descriptionText.setText(mindMapData.getExplain()) ;
-        holder.optionButton.setImageBitmap(MindMapEditorActivity.convertBase64ToBitmap(mindMapData.getImage())); ;
+        if(mindMapData.getImage() != null)
+            holder.imageView.setImageBitmap(MindMapEditorActivity.convertBase64ToBitmap(mindMapData.getImage())); ;
     }
 
     @Override
@@ -124,6 +130,7 @@ public class MindMapAdapter extends RecyclerView.Adapter<MindMapAdapter.ViewHold
         }
         else {
             for (MindMapData data_i : data) {
+                if(data_i.getExplain() == null) continue;
                 if (data_i.getExplain().contains(filterStr)) {
                     filteredData.add(data_i);
                 }

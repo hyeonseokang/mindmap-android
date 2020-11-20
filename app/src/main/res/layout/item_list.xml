@@ -50,7 +50,7 @@
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:layout_marginTop="36dp"
-        android:background="#514444"
+        android:scaleType="center"
         app:layout_constraintTop_toTopOf="parent">
     </ImageView>
 
